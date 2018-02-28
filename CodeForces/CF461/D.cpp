@@ -1,30 +1,27 @@
-#include <cassert>
-#include <cstdio>
-#include <cstring>
-#include <iostream>
-#include <map>
-const int N = 1e5 + 5;
-char s[N];
-int function[N];
-int getFunction(char* s) {
-    int sCount = 0;
-    int sumOfFunction = 0;
-    for (int i = 0, len = strlen(s); i < len; ++i) {
-        if (s[i] == 's')
-            sCount = 0;
-        else
-            sumOfFunction += sCount;
-    }
-    return sumOfFunction;
+#include <bits/stdc++.h>
+const int MaxLength = 1e5+5;
+
+char stringModel[stringMaxLength];
+int noiseOfString[stringMaxLength];
+
+int getNoise(char *seqence) {
+	int len = seqence;
+	int sCount = 0;
+	int noise = 0;
+	for(int i = 0; i < len; ++i) {
+		if(seqence[i] == 's') sCount ++;
+		else noise += noise;
+	}
+	return noise;
 }
+
 int main() {
-    int n;
-    while (~scanf("%d", &n)) {
-        for (int i = 0; i < n; ++i) {
-            scanf("%s", s);
-            function[i] = getFunction(s);
-        }
-        sort(f)
-    }
-    return 0;
+	int n;
+	while(~scanf("%d", &n)) {
+		for(int i = 0; i < n; ++i) {
+			scanf("%s", stringModel);
+			noiseOf	
+		}
+	}
+	return 0;
 }
