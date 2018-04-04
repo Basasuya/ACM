@@ -1,26 +1,32 @@
-#include <algorithm>
-#include <cmath>
-#include <cstdio>
-#include <cstring>
 #include <iostream>
-#include <map>
-#include <queue>
-#include <set>
-#include <stack>
-#include <vector>
+#include <string>
 using namespace std;
-typedef long long ll;
-const int N = 1e6 + 5;
-const int MOD = 1e9 + 7;
-#define MS(x, y) memset(x, y, sizeof(x))
-#define MP(x, y) make_pair(x, y)
-const int INF = 0x3f3f3f3f;
+string BigNumMultiply(string str1, string str2) {
+    int size1 = str1.size();
+    int size2 = str2.size();
+    string str(size1 + size2, '0');
+    for (int i = size2 - 1; i >= 0; --i) {
+        int mulflag = 0, addflag = 0;
+        for (int j = size1 - 1; j >= 0; --j) {
+            int temp1 = (str2[i] - '0') * (str1[j] - '0') + mulflag;
+            mulflag = temp1 / 10;
+            temp1 = temp1 % 10;
+            int temp2 = str[i + j + 1] - '0' + temp1 + addflag;
+            str[i + j + 1] = temp2 % 10 + 48;
+            addflag = temp2 / 10;
+        }
+        str[i] += mulflag + addflag;
+    }
+    if (str[0] == '0')
+        str = str.substr(1, str.size());
+    return str;
+}
 
 int main() {
-    double a, x, y, b, h;
-    while (~scanf("%lf %lf %lf %lf %lf", &a, &x, &y, &b, &h)) {
-        double hei = (b - a) * (b - x - a) / x * (-4.0) * y / x;
-        printf("%.3f\n", hei);
+    string str1, str2;
+    while (cin >> str1 >> str2) {
+        // cout << str1 << "*" << str2 << "=" << endl;
+        cout << BigNumMultiply(str1, str2) << endl;
     }
     return 0;
 }
