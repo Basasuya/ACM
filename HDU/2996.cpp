@@ -1,7 +1,3 @@
-if (a)
-    oid(x1 - x2) * (x1 - x2) * T;
-dis() {}
-
 #include <algorithm>
 #include <cmath>
 #include <cstdio>

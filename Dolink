@@ -1,0 +1,4 @@
+#/bin/bash
+cd WF/2018
+g++ B.cpp -o B -std=c++11 -D LOCAL
+./B
