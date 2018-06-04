@@ -3,20 +3,19 @@ using namespace std;
 const int MAXN = 2005;
 const int INF = 0x3f3f3f3f;
 typedef long long ll;
-const double tiny = 1e-8;
+typedef long double Double;
+const Double tiny = 1e-20;
 
 
-int Ceil(double x) {
-    
-    int tt = int(x);
- //   printf("%d %.9f\n", tt, x);
-    if(tt == x) tt ++;
+ll Ceil(Double x) {
+    ll tt = ceil(x);
+    if(abs(tt - x) < tiny) tt ++;
     return tt;
 }
 
-int Floor(double x) {
-    int tt = int(x);
-    if(tt == x) tt --;
+ll Floor(Double x) {
+    ll tt = floor(x);
+    if(abs(tt - x) < tiny) tt --;
     return tt;
 }
 
@@ -27,39 +26,38 @@ int main() {
 
     int r, a, b, n;
     while(~scanf("%d %d %d %d", &r, &a, &b, &n)) {
-        double leftEdge = a*1.0/b;
-        double rightEdge = 2*n - a*1.0/b;
+        Double leftEdge = Double(a*1.0)/b;
+        Double rightEdge = 2*n - Double(a*1.0)/b;
+        Double radiusTo2 = n - Double(a*1.0)/b;
         if(leftEdge > rightEdge) swap(leftEdge, rightEdge); 
         ll sum = 0;
         
-        double leftDouble = r + 2*leftEdge;
+        Double leftDouble = r + 2*leftEdge;
         int leftInt = ceil(leftDouble);
         
-        double rightDouble = r - 2*rightEdge;
+        Double rightDouble = r - 2*rightEdge;
         int rightInt = ceil(rightDouble);
         
         sum += 1ll * (rightInt + leftInt) * r;
-    //    printf("%d %d %lld\n", leftInt, rightInt, sum);
-        double cirRadius = (rightEdge - leftEdge) / sqrt(2);
+        if(rightInt % 2) sum += r & 1;
+        if(leftInt % 2) sum += r & 1;
+        // printf("%d %d %lld\n", leftInt, rightInt, sum);
+        Double cirRadius = (rightEdge - leftEdge) / sqrt(2);
         // printf("%.3f\n", cirRadius);
         ll tmpSum = 0;
-        for(int i = Floor(cirRadius), xShift = 0, edge = Ceil((rightEdge - leftEdge)/2.0); i >= edge; --i) {
-            // printf("%d %d\n", i, edge);
-            while(1) {
-                double tmpRadius = sqrt(1ll* xShift * xShift + 1ll* i * i);
-                if(tmpRadius >= cirRadius) break;
-                xShift ++;
-            } 
-            xShift --;
-            tmpSum += xShift;
+        for(int i = Floor(cirRadius), edge = ceil(radiusTo2); i >= edge; --i) {
+            tmpSum += Floor(sqrt( (rightEdge - leftEdge)*(rightEdge - leftEdge) / 2 - 1ll*i*i));
+            // tmpSum += Floor(sqrt( cirRadius * cirRadius - 1ll*i*i));
         }
         sum += tmpSum * 8;
         // printf("%lld\n", sum);
-        sum += Floor(cirRadius) * 4 + 1;
+        sum += 1ll * Floor(cirRadius) * 4;
         // printf("%lld\n", sum);
-        sum += Floor((rightEdge - leftEdge)/2.0) * Floor((rightEdge - leftEdge)/2.0) * 4;
+        // printf("%.9f\n", (rightEdge - leftEdge)/2.0);
+        sum += 1ll* Floor(radiusTo2) * Floor(radiusTo2) * 4;
 
-        sum -= Floor(n - leftEdge) * 2 + 1;
+        sum -= 1ll * Floor(n - leftEdge) * 2;
+        
         printf("%lld\n", sum);
     }
     return 0;
