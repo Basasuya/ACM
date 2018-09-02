@@ -14,3 +14,4 @@ Dolink
 .DS_Store
 /Test/*
 Dolink.sh
+*.dSYM
