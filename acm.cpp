@@ -35,4 +35,8 @@ int main(int argc, char** argv) {
     tt += string(argv[1]);
     tt += " -std=c++11";
     int t1 = system(tt.c_str());
+
+    tt = "./";
+    tt += string(argv[1]);
+    int t2 = system(tt.c_str());
 }
