@@ -17,65 +17,59 @@
 #include <vector>
 using namespace std;
 typedef long long ll;
-const int N = 5e6 + 5;
+const int N = 1e4 + 5;
 const int INF = 0x3f3f3f3f;
-const int MOD = 998244353;
+const int MOD = 2333;
 
-int isPrime[N];
-int primes[N];
-int mu[N];
-int num;
-int k;
-void sieve() {
-    fill(isPrime, isPrime + N, 1);
-    mu[1] = 1, num = 0;
-    for (int i = 2; i < N; ++i) {
-        if (isPrime[i]) primes[num++] = i, mu[i] = -1;
-        static int d;
-        for (int j = 0; j < num && (d = i * primes[j]) < N; ++j) {
-            isPrime[d] = false;
-            if (i % primes[j] == 0) {
-                mu[d] = 0;
-                break;
-            } else mu[d] = -mu[i];
-        }
-    }
-}
+char seq[N];
+int prefix[N];
 
-int Pow(int x, int y) {
-    ll ans = 1;
-    while(y) {
-        if(y & 1) ans = 1ll * ans * x % MOD;
-        x = 1ll * x * x % MOD;
-        y >>= 1;
-    }
-    return ans;
-}
-
-
-
-
-void solve(int x) {
-    ll ans = 0;
-    for(int i = 1; i <= sqrt(x); ++i) {
-        if(x % i == 0) {
-            ans = (ans + Pow(i, k) * mu[x / i] % MOD + MOD) % MOD;
-            if(x / i != i) {
-                ans = (ans + Pow(x/i, k) * mu[i] % MOD + MOD) % MOD;
-            }
-        }
-    }
-    printf("%lld\n", ans);
-}
-
+int dp[2][N];
 int main() {
-    int m;
-    sieve();
-    while(~scanf("%d %d", &m, &k)) {
-        for(int i = 0; i < m; ++i) {
-            int q; scanf("%d", &q);
-            solve(q);
+    int n;
+    while(~scanf("%d", &n)) {
+        memset(dp, 0, sizeof(dp));
+        scanf("%s", seq + 1);
+        
+        prefix[0] = 0;
+        for(int i = 1; i <= n; ++i) {
+            prefix[i] = prefix[i-1] + (seq[i] == '(' ? 1 : -1);
         }
+
+        if(prefix[n] != 0) {
+            printf("0\n");
+            continue;
+        }
+
+
+        int flag = 1;
+        int ed = 0;
+        dp[flag][0] = 1;
+
+        for(int i = 1; i <= n; ++i) {
+            if(seq[i] == '(') {
+                dp[flag ^ 1][ed + 1] = dp[flag][ed];
+                dp[flag ^ 1][0] = dp[flag][0];
+                for(int j = ed; j >= 1; --j) {
+                    dp[flag ^ 1][j] = (dp[flag][j - 1] + dp[flag][j]) % MOD;
+                }
+                ed ++;
+            } else {
+                for(int j = ed; j >= 0; --j) {
+                    dp[flag ^ 1][j] = dp[flag][j + 1];
+                    if(prefix[i] - j>= 0) dp[flag ^ 1][j] = (dp[flag][j] + dp[flag ^ 1][j]) % MOD;
+                }
+            }
+            flag ^= 1;
+
+        //    for(int j = 0; j <= ed; ++j) printf("%d ", dp[flag][j]); printf("\n");
+        }
+        // int ans = 0;
+        // for(int i = 0; i <= ed; ++i) {
+        //     ans = (ans + dp[flag][0]) % MOD;
+        // }
+
+        printf("%d\n", dp[flag][0]);
     }
     return 0;
 }
