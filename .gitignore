@@ -15,3 +15,5 @@ Dolink
 /Test/*
 Dolink.sh
 *.dSYM
+*.in
+*.out
