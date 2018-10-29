@@ -16,3 +16,5 @@ Dolink
 Dolink.sh
 *.dSYM
 /Codechef/Snackdown
+*.in
+*.out
