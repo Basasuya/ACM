@@ -16,53 +16,55 @@
 #include <assert.h>
 #include <iomanip>
 using namespace std;
-const int N = 100005;
-const int M = 200005;
+const int N = 2005;
+const int M = 2005;
 const int INF = 0x3f3f3f3f;
 const int MOD = 998244353;
 typedef long long ll;
 
 struct Node{
   int fr, to, nx, di;
-}E[M*2];
+}E[N*2];
 int head[N], tot;
 void add(int fr, int to) {
   E[tot].to = to;  E[tot].nx = head[fr];
   head[fr] = tot ++;
 }
-int vis[N];
-ll dp[2][N][N];
-ll flag[N];
+
+int Size[N], dp[N][N], h[N];
 int n, T;
 
 void dfs(int x, int pre) {
-    int tmp[N];
-    flag[x] = 0;
+    // printf("%d %d\n", x , pre);
+    Size[x] = 1;
+    dp[x][1] = 1;
     for(int i = head[x]; ~i; i = E[i].nx) {
         int to = E[i].to; if(to == pre) continue;
         dfs(to, x);
-        for(int j = 1; j <= T; ++j) {
-            for(int k = 0; k <= j; ++k) {
-                dp[flag[x]][x][j+1] = (dp[flag[x]][x][j] + dp[flag[x] ^ 1][x][j - k] * dp[flag[to]][to][k]) % MOD;
+        
+        for(int j = 0; j <= min(T, Size[x] + Size[to]); ++j) h[j] = 0;
+        for(int j = 1; j <= min(Size[x], T); ++j) {
+            for(int k = 0; k <= min(Size[to], T); ++k) {
+                h[j + k] = (h[j + k] + 1ll * dp[x][j] * dp[to][k]) % MOD;
             }
         }
-
+        Size[x] += Size[to];
+        for(int j = 0; j <= min(T, Size[x]); ++j) dp[x][j] = h[j];
     }
+    for(int i = 1; i <= min(T, Size[x]); ++i) dp[x][0] = (1ll * dp[x][0] + dp[x][i]) % MOD;
 }
 int main() {
     while(~scanf("%d %d", &n, &T)) {
         tot = 0;
         memset(head, -1, sizeof(head));
-        memset(vis, 0, sizeof(vis));
         memset(dp, 0, sizeof(dp));
 
         for(int i = 1; i < n; ++i) {
             int u, v; scanf("%d %d", &u, &v);
             add(u, v); add(v, u);
         }
-
         dfs(1, 1);
-
+        printf("%d\n", dp[1][0]);
     }
     return 0;
 }
