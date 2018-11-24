@@ -16,17 +16,11 @@
 #include <assert.h>
 #include <iomanip>
 using namespace std;
-<<<<<<< HEAD
 const int N = 1e5+5;
-=======
-// const int N = 7005;
-const int M = 2e5 + 5;
->>>>>>> 26e32ba06d3e1e8c864089a676f77b78b2121968
 const int INF = 0x3f3f3f3f;
 const int MOD = 1000000007;
 typedef long long ll;
 
-<<<<<<< HEAD
 ll a[N];
 int main() {
     ll n; int m;
@@ -84,39 +78,3 @@ int main() {
 9 4
 2 2 2 3
 */
-=======
-int main() {
-    int a, b, l;
-    while(~scanf("%d %d %d", &a, &b, &l)) {
-        ll x = a; ll y = b;
-        int suc = 0;
-        while(1) {
-            if(x > l) {
-                break;
-            }
-            ll tt = y / x;
-            ll t2 = y % x;
-            if(t2) tt ++;
-            y += x * tt;
-            swap(x, y);
-            suc ^= 1;
-        }
-        printf("%s", !suc ? "Yes" : "No");
-        x = b; y = a;
-        suc = 0;
-        while(1) {
-            if(x > l) {
-                break;
-            }
-            ll tt = y / x;
-            ll t2 = y % x;
-            if(t2) tt ++;
-            y += x * tt;
-            swap(x, y);
-            suc ^= 1;
-        }
-        printf(" %s\n", suc ? "Yes" : "No");
-    }
-    return 0;
-}
->>>>>>> 26e32ba06d3e1e8c864089a676f77b78b2121968
