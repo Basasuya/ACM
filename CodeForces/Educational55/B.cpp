@@ -31,10 +31,10 @@ int main() {
         // vector<int> ans2;
 
         scanf("%s", seq);
-        int tmp = 0; int cntG = 0; int tmp2 = 0;
+        int tmp = 0; int cntG = 0; int tmp2 = 0; int cntS = 0;
         for(int i = 0; i < n; ++i) {
             if(seq[i] == 'G') {
-                if(tmp2) ans.push_back(-tmp2);
+                if(tmp2) { ans.push_back(-tmp2); cntS ++; }
                 tmp2 = 0;
                 tmp ++;
             }
@@ -46,13 +46,13 @@ int main() {
         }
         
         if(tmp) { ans.push_back(tmp); cntG ++; }
-        if(tmp2) ans.push_back(-tmp2);
+        if(tmp2) { ans.push_back(-tmp2); cntS ++; }
 
         int all = 0;
         int tag = 0;
         if(ans[0] < 0) tag ++;
         for(int i = tag; i < ans.size(); i += 2) {
-            all = max(all, ans[i]);
+            all = max(all, ans[i] + (cntG > 1 && cntS > 0));
             if(i + 2 < ans.size() && ans[i + 1] == -1) all = max(all, ans[i] + ans[i + 2] + (cntG > 2) );
         }
         
