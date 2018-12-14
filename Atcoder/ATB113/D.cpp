@@ -1,31 +1,70 @@
 #include <iostream>
-#include <cstdio>
-#include <cstdlib>
-#include <cmath>
-#include <climits>
-#include <cstring>
-#include <vector>
-#include <list>
-#include <queue>
-#include <stack>
-#include <map>
-#include <set>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <assert.h>
-#include <iomanip>
+#include <string>
 using namespace std;
-const int N = 1e5 + 5;
-// const int M = 1005;
-const int INF = 0x3f3f3f3f;
-const int MOD = 1000000007;
+
 typedef long long ll;
 
-int main() {
-    int h, w, k;
-    while(~scanf("%d %d %d", &h, &w, &k)) {
-        
+const ll MOD = (1e+9) + 7;
+
+ll memo[10]; // have none continuous 1 
+ll dp[101][8];
+
+void dfs(string s)
+{
+  if(s.size() > 8) return;
+
+  bool f = false;
+  for(int i = 0; i < s.size(); i++){
+    if(s[i] == '1'){
+      if(f) return;
+      f = true;
+    }else{
+      f = false;
     }
-    return 0;
+  }
+
+  memo[s.size()]++;
+
+  dfs(s + '0');
+  dfs(s + '1');
+}
+
+int main()
+{
+  dfs("");
+    // for(int i = 0; i < 10; ++i) printf("%d ", memo[i]); printf("\n");
+  int h, w, k;
+  cin >> h >> w >> k;
+
+  dp[0][0] = 1;
+
+  ll t;
+  for(int i = 1; i <= h; i++){
+    for(int j = 0; j < w; j++){
+      if(j > 0){
+        t = memo[max(0, w-1-(j+1))];
+        t *= memo[max(0, j-2)];
+        t %= MOD;
+        dp[i][j] = dp[i-1][j-1] * t % MOD;
+      }
+
+      if(j < w-1){
+        t = memo[max(0, j-1)];
+        t *= memo[max(0, w-1-(j+2))];
+        t %= MOD;
+        dp[i][j] += dp[i-1][j+1] * t % MOD;
+        dp[i][j] %= MOD;
+      }
+
+      t = memo[max(0, j-1)];
+      t *= memo[max(0, w-1-(j+1))];
+      t %= MOD;
+      dp[i][j] += dp[i-1][j] * t % MOD;
+      dp[i][j] %= MOD;
+    }
+  }
+
+  cout << dp[h][k-1] << endl;
+
+  return 0;
 }
