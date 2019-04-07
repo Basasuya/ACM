@@ -1,3 +1,4 @@
-ACM is my personal studying program
+# ACM
+ACM is my personal program site
 
-Codeforces.com
+I main learn program coding on Codeforces.com, Google kickstart/codejam. atcoder
