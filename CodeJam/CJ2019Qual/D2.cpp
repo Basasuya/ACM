@@ -23,10 +23,10 @@ const int MOD = 1000000007;
 typedef long long ll;
 
 void solve(){
-	int F = 5;
+	int F = 4;
 	int n, b, fake_f;
 	cin >> n >> b >> fake_f;
-	assert(fake_f >= F);
+	// assert(fake_f >= F);
 	for(int f = 0; f < F; f++){
 		string g;
 		for(int i = 0; i < n; i++){
@@ -41,14 +41,14 @@ void solve(){
 		for(int i = 0; i < n-b; i++){
 			answers[i] ^= (res[i] - '0') << f;
 		}
-        for(int i = 0; i < n - b; ++i) {
-            printf("%d ", answers[i]);
-        } printf("\n");
+        // for(int i = 0; i < n - b; ++i) {
+        //     printf("%d ", answers[i]);
+        // } printf("\n");
 	}
 	vector<int> broken;
 	int z = 0;
 	for(int i = 0; i < n-b; i++){
-		while((z & 31) != answers[i]){
+		while((z & 15) != answers[i]){
 			cout << z << ' ';
 			z++;
 		}
