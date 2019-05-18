@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
     tt += string(argv[1]);
     tt += ".cpp -o ";
     tt += string(argv[1]);
-    tt += " -O3 -msse -msse2 -msse3 -funroll-loops -std=c++11 -Ofast -march=native -ffast-math";
+    tt += " -O3 -msse -msse2 -msse3 -funroll-loops -std=c++11 -Ofast -march=native -ffast-math -DLOCAL";
     int t1 = system(tt.c_str());
 
     tt = "./";
