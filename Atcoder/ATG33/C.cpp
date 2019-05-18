@@ -49,7 +49,6 @@ pairii bfs(int s)
 int main()
 {
     int n;
-    ;
     while(~scanf("%d", &n))
     {
         
@@ -65,9 +64,9 @@ int main()
         pairii t2 = bfs(t1.first);
 
         int diameter = t2.second;
-        
-        printf("diameter: %d\n", diameter);
-        if(diameter % 2) printf("First\n");
+        diameter --;
+        // printf("diameter: %d\n", diameter);
+        if( (diameter % 3) != 1) printf("First\n");
         else printf("Second\n");
     }
  
