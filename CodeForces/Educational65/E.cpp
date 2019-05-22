@@ -1,57 +1,122 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <set>
-#include <map>
-#include <bitset>
-#include <algorithm>
-#include <iomanip>
-#include <cmath>
-#include <ctime>
-#include <functional>
-#include <unordered_set>
-#include <unordered_map>
-#include <queue>
-#include <deque>
-#include <stack>
-#include <complex>
-#include <cassert>
-#include <random>
-#include <cstring>
-#include <numeric>
-#define ll long long
-#define ld long double
-#define null NULL
-#define all(a) a.begin(), a.end()
-#define forn(i, n) for (int i = 0; i < n; ++i)
-#define sz(a) (int)a.size()
-#define lson l , m , rt << 1
-#define rson m + 1 , r , rt << 1 | 1
-template<class T> int gmax(T &a, T b) { if (b > a) { a = b; return 1; } return 0; }
-template<class T> int gmin(T &a, T b) { if (b < a) { a = b; return 1; } return 0; }
+//~ while (clock()<=69*CLOCKS_PER_SEC)
+//~ #pragma comment(linker, "/stack:200000000")
+#pragma GCC optimize("O3")
+//~ #pragma GCC optimize("Ofast")
+//~ #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
+//~ #pragma GCC optimize("unroll-loops")
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+
+using namespace __gnu_pbds;
 using namespace std;
-string to_string(string s) { return '"' + s + '"'; }
-string to_string(const char* s) { return to_string((string) s); }
-string to_string(bool b) { return (b ? "true" : "false"); }
-template <typename A, typename B>
-string to_string(pair<A, B> p) { return "(" + to_string(p.first) + ", " + to_string(p.second) + ")"; }
-template <typename A>
-string to_string(A v) { bool first = true; string res = "{"; for (const auto &x : v) { if (!first) { res += ", "; } first = false; res += to_string(x); } res += "}"; return res; }
-void debug_out() { cerr << endl; }
-template <typename Head, typename... Tail>
-void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...); }
+
+template <typename T>
+using ordered_set =
+    tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+
+#define sim template < class c
+#define ris return * this
+#define dor > debug & operator <<
+#define eni(x) sim > typename \
+  enable_if<sizeof dud<c>(0) x 1, debug&>::type operator<<(c i) {
+sim > struct rge { c b, e; };
+sim > rge<c> range(c i, c j) { return rge<c>{i, j}; }
+sim > auto dud(c* x) -> decltype(cerr << *x, 0);
+sim > char dud(...);
+struct debug {
 #ifdef LOCAL
-#define debug(...) cerr << "[" << #__VA_ARGS__ << "]:", debug_out(__VA_ARGS__)
+~debug() { cerr << endl; }
+eni(!=) cerr << boolalpha << i; ris; }
+eni(==) ris << range(begin(i), end(i)); }
+sim, class b dor(pair < b, c > d) {
+  ris << "(" << d.first << ", " << d.second << ")";
+}
+sim dor(rge<c> d) {
+  *this << "[";
+  for (auto it = d.b; it != d.e; ++it)
+    *this << ", " + 2 * (it == d.b) << *it;
+  ris << "]";
+}
 #else
-#define debug(...) 42
+sim dor(const c&) { ris; }
 #endif
+};
+#define imie(...) " [" << #__VA_ARGS__ ": " << (__VA_ARGS__) << "] "
 
+#define shandom_ruffle random_shuffle
 
-const 
-int main() {
-    int n, x;
-    while(~scanf("%d %d", &n, &x)) {
+using ll=long long;
+using pii=pair<int,int>;
+using pll=pair<ll,ll>;
+using vi=vector<int>;
+using vll=vector<ll>;
+const int nax=1000*1007;
 
-    }
-    return 0;
+int n, m;
+int tab[nax];
+
+vi wek[nax];
+
+ll wyn;
+
+int pocz[nax];
+int kon[nax];
+
+int czyok(int a, int b)
+{
+	return pocz[a-1]<kon[b+1];
+}
+
+int main()
+{
+	scanf("%d%d", &n, &m);
+	for (int i=1; i<=n; i++)
+		scanf("%d", &tab[i]);
+	for (int i=1; i<=n; i++)
+		wek[tab[i]].push_back(i);
+	pocz[0]=0;
+	for (int i=1; i<=m; i++)
+	{
+		if (wek[i].empty())
+		{
+			pocz[i]=pocz[i-1];
+		}
+		else
+		{
+			if (wek[i][0]<pocz[i-1])
+				pocz[i]=n+7;
+			else
+				pocz[i]=wek[i].back();
+		}
+	}
+	kon[m+1]=n+1;
+	for (int i=m; i; i--)
+	{
+		if (wek[i].empty())
+		{
+			kon[i]=kon[i+1];
+		}
+		else
+		{
+			if (wek[i].back()>kon[i+1])
+				kon[i]=-7;
+			else
+				kon[i]=wek[i][0];
+		}
+	}
+	//~ debug() << range(pocz+1, pocz+m);
+	//~ debug() << range(kon+1, kon+m);
+	int w=0;
+	for (int i=1; i<=m && czyok(i, m); i++)
+	{
+		w=max(w, i);
+		while(!czyok(i, w))
+			w++;
+		//~ debug() << i << " " << w;
+		wyn+=m-w+1;
+	}
+	
+	printf("%lld\n", wyn);
+	return 0;
 }
