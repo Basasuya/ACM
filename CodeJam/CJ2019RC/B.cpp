@@ -46,52 +46,12 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-
-int man[105];
-vector<int> st[25];
 int main() {
     int T;
-    srand((unsigned)time(NULL));
     scanf("%d", &T);
-    while(T --) {
+    for(int cas = 1; cas <= T; ++ cas) {
+        int S;
         
-        for(int i = 1; i <= 4; ++i) {
-            for(int j = 1; j <= 14; ++j) {
-                int choose = rand() % 100 + 1;
-                int round; scanf("%d", &round);
-                printf("%d %d\n", j, choose); fflush(stdout);
-            }
-        }
-
-        for(int i = 1; i <= 20; ++i) st[i].clear();
-        for(int i = 1; i <= 20; ++i) {
-            int round; scanf("%d", &round);
-            printf("%d 0\n", i); fflush(stdout);
-            int n; scanf("%d", &n);
-            for(int j = 0; j < n; ++j) {
-                int tt; scanf("%d", &tt);
-                st[i].push_back(tt);
-            }
-        }
-        
-        set<pair<int, int> > pack;
-        for(int i = 1; i <= 20; ++i) {
-            pack.insert(make_pair(st[i].size(), i));
-        }
-
-        for(int i = 1; i <= 23; ++i) {
-            pair<int, int> tmp = *(++ pack.begin());
-            int t1 = tmp.first; int t2 = tmp.second;
-            int round; scanf("%d", &round); 
-            printf("%d %d\n", t2, 100); fflush(stdout);
-
-            pack.erase( ++ pack.begin());
-            pack.insert(make_pair(t1 + 1, t2));
-        }
-
-        int choose = (*pack.begin()).second;
-        int round; scanf("%d", &round); 
-        printf("%d 100\n", choose); fflush(stdout);
     }
     return 0;
 }
