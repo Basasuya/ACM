@@ -46,20 +46,22 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
- 
 int main() {
-	int n; cin >> n;
-	vector<int> a(n);
-	for (int i = 0; i < n; ++i) cin >> a[i];
-	sort(begin(a), end(a));
-	int res = 0, last = 0;
-	for (int i = 0; i < n; ++i) {
-		if (a[i] - 1 > last) --a[i];
-		if (a[i] == last) ++a[i];
-		if (a[i] > last) {
-			++res;
-			last = a[i];
-		}
-	}
-	cout << res << endl;
+    string s;
+    while(cin >> s) {
+        if(s == string("0")) {
+            printf("0\n");
+            continue;
+        }
+        int len = s.length();
+        int ans = (len + 1) / 2;
+        
+        int cnt = 0;
+        for(int i = 0; i < len; ++i) {
+            if(s[i] == '1') cnt ++;
+        } 
+        if(cnt == 1 && len % 2 == 1) ans --;
+        printf("%d\n", ans);
+    }   
+    return 0; 
 }

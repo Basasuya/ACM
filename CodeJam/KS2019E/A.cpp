@@ -24,6 +24,7 @@
 #define null NULL
 #define all(a) a.begin(), a.end()
 #define forn(i, n) for (int i = 0; i < n; ++i)
+#define forw(i, l, r) for (int i = l; i < r; ++i)
 #define sz(a) (int)a.size()
 #define lson l , m , rt << 1
 #define rson m + 1 , r , rt << 1 | 1
@@ -46,20 +47,45 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
- 
+const int MAXN = 1e5 + 5;
+
+int n, m;
+int fr[MAXN], to[MAXN];
+int fa[MAXN];
+int Find(int x) {
+    return fa[x] == x ? x : fa[x] = Find(fa[x]);
+}
 int main() {
-	int n; cin >> n;
-	vector<int> a(n);
-	for (int i = 0; i < n; ++i) cin >> a[i];
-	sort(begin(a), end(a));
-	int res = 0, last = 0;
-	for (int i = 0; i < n; ++i) {
-		if (a[i] - 1 > last) --a[i];
-		if (a[i] == last) ++a[i];
-		if (a[i] > last) {
-			++res;
-			last = a[i];
-		}
-	}
-	cout << res << endl;
+    int T;
+    scanf("%d", &T);
+    for(int cas=1; cas <= T; ++cas) {
+        
+        scanf("%d %d", &n, &m);
+        for(int i = 1; i <= n; ++i) fa[i] = i;
+        for(int i = 0; i < m; ++i) {
+            scanf("%d %d", &fr[i], &to[i]);
+        }
+        int num = 0;
+        for(int i = 0; i < m; ++i) {
+            int t1 = Find(fr[i]);
+            int t2 = Find(to[i]);
+            if(t1 == t2) continue;
+            fa[t1] = t2;
+            if(++ num == n - 1) break;
+        }
+
+        if(num < n - 1) {
+            debug(num);
+            set<int> st;
+            for(int i = 1; i <= n; ++i) {
+                debug(Find(i));
+                st.insert(Find(i));
+            }
+            num += (st.size() - 1) * 2;
+        }
+
+        printf("Case #%d: ", cas);
+        printf("%d\n", num);
+    }
+    return 0;
 }
