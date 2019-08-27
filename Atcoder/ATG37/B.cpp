@@ -46,49 +46,31 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-bool check_first_round(vector<int> &has, int n, int k) {
-    for(int i = 1; i <= n - k + 1; ++i) {
-        int tmp = has[i-1] - has[0] + has[n] - has[i + k - 1];
-        if(tmp == 0 || tmp == n - k) return true;
-    }
-    return false;
-}
-
-bool check_second_round(vector<int> &has, int n, int k) {
-    if(2 * k < n || k == 1) return false;
-    for(int i = 2; i <= n - k; ++i) {
-        int tmp1 = has[i-1] - has[0];
-        int tmp2 = has[n] - has[i + k - 1];
-
-        if( (tmp1 == 0 && tmp2 == n - i - k + 1) || (tmp1 == i - 1 && tmp2 == 0) ); 
-        else return false;
-    }
-    debug("hhhh");
-    // if(has[k] != 0 && has[k] != k) return false;
-    // if(has[n] - has[n - k] != 0 && has[n] - has[n - k] != k) return false;
-    return true;
-}
-
+const int MOD = 998244353;
 int main() {
     std::ios::sync_with_stdio(false);
     std::cin.tie(0);
-    int n, k;
-    while(cin >> n >> k) {
-        string s;
+    int n;
+    while(cin >> n) {
+        string s; 
         cin >> s;
-        vector<int> has(n + 5, 0);
-        for(int i = 0, len = s.length(); i < len; ++i) {
-            has[i + 1] += s[i] - '0';
-        }
-        for(int i = 1; i <= n; ++i) {
-            has[i] += has[i-1];
+        int fr[5]; memset(fr, 0, sizeof(fr));
+        int to[5]; memset(to, 0, sizeof(to));
+        for(int i = 0; i < n; ++i) {
+            if(s[i] == 'R') fr[0] ++;
+            else if(s[i] == 'B') fr[1] ++;
+            else fr[2] ++;
         }
 
-        if(check_first_round(has, n, k)) cout << "tokitsukaze" << endl;
-        else {
-            if(check_second_round(has, n, k)) cout << "quailty" << endl;
-            else cout << "once again" << endl;
+        for(int i = 2*n; i < 3*n; ++i) {
+            if(s[i] == 'R') to[0] ++;
+            else if(s[i] == 'B') to[1] ++;
+            else to[2] ++;
         }
+
+        
+
+        printf("%lld\n", ans);
     }
     return 0;
 }

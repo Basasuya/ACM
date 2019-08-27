@@ -46,48 +46,35 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-bool check_first_round(vector<int> &has, int n, int k) {
-    for(int i = 1; i <= n - k + 1; ++i) {
-        int tmp = has[i-1] - has[0] + has[n] - has[i + k - 1];
-        if(tmp == 0 || tmp == n - k) return true;
-    }
-    return false;
-}
+const int MAXN = 105;
+int A[MAXN][MAXN];
+int B[MAXN][MAXN];
+int C[MAXN][MAXN];
 
-bool check_second_round(vector<int> &has, int n, int k) {
-    if(2 * k < n || k == 1) return false;
-    for(int i = 2; i <= n - k; ++i) {
-        int tmp1 = has[i-1] - has[0];
-        int tmp2 = has[n] - has[i + k - 1];
-
-        if( (tmp1 == 0 && tmp2 == n - i - k + 1) || (tmp1 == i - 1 && tmp2 == 0) ); 
-        else return false;
-    }
-    debug("hhhh");
-    // if(has[k] != 0 && has[k] != k) return false;
-    // if(has[n] - has[n - k] != 0 && has[n] - has[n - k] != k) return false;
-    return true;
-}
 
 int main() {
-    std::ios::sync_with_stdio(false);
-    std::cin.tie(0);
-    int n, k;
-    while(cin >> n >> k) {
-        string s;
-        cin >> s;
-        vector<int> has(n + 5, 0);
-        for(int i = 0, len = s.length(); i < len; ++i) {
-            has[i + 1] += s[i] - '0';
-        }
+    int n, m;
+    while(~scanf("%d %d", &n, &m)) {
+        memset(B, -1, sizeof(B));
+        memset(C, -1, sizeof(C));
+
         for(int i = 1; i <= n; ++i) {
-            has[i] += has[i-1];
+            for(int j = 1; j <= m; ++j) {
+                scanf("%d", &A[i][j]);
+            }
         }
 
-        if(check_first_round(has, n, k)) cout << "tokitsukaze" << endl;
-        else {
-            if(check_second_round(has, n, k)) cout << "quailty" << endl;
-            else cout << "once again" << endl;
+        vector<int> col[105];
+        for(int i = 1; i <= n; ++i) {
+            for(int j = 1; j <= m; ++j) {
+                col[(A[i][j] - 1) / m].push_back(A[i][j]);
+            }
+        }
+
+        for(int i = 0; i < n; ++i) {
+            for(int j = 0; j < m; ++j) {
+                
+            }
         }
     }
     return 0;
