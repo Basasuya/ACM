@@ -49,9 +49,13 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 const int MAXN = 30005;
 int a[MAXN], b[MAXN], id[MAXN];
 int cmp(int x, int y) {
-    if(b[x] * b[y] < 0) return b[x] > 0;
-    else if(b[x] * b[y] == 0) return a[x] < a[y];
-    else if(b[x] < 0) return a[x] > a[y];
+    if(b[x] * b[y] < 0) return b[x] >= 0;
+    else if(b[x] * b[y] == 0) {
+        if(b[x] < 0) return 0;
+        if(b[y] < 0) return 1;
+        return a[x] < a[y];
+    }
+    else if(b[x] < 0) return a[x] + b[x] > a[y] + b[y];
     else return a[x] < a[y];
 }
 int main() {
@@ -67,12 +71,12 @@ int main() {
             
             int t1 = a[id[i]];
             int t2 = b[id[i]];
-            debug(id[i], t1, t2, tmp);
+            // debug(id[i], t1, t2, tmp);
             flag &= t1 <= tmp;
             tmp += t2;
             flag &= tmp >= 0;
         }
-        debug(flag);
+        // debug(flag);
         printf("%s\n", flag == true? "YES" : "NO");
     }
     return 0;

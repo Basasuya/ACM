@@ -24,6 +24,7 @@
 #define null NULL
 #define all(a) a.begin(), a.end()
 #define forn(i, n) for (int i = 0; i < n; ++i)
+#define forw(i, l, r) for (int i = l; i < r; ++i)
 #define sz(a) (int)a.size()
 #define lson l , m , rt << 1
 #define rson m + 1 , r , rt << 1 | 1
@@ -46,20 +47,52 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
- 
+int A[55][55];
+int B[55][55];
 int main() {
-	int n; cin >> n;
-	vector<int> a(n);
-	for (int i = 0; i < n; ++i) cin >> a[i];
-	sort(begin(a), end(a));
-	int res = 0, last = 0;
-	for (int i = 0; i < n; ++i) {
-		if (a[i] - 1 > last) --a[i];
-		if (a[i] == last) ++a[i];
-		if (a[i] > last) {
-			++res;
-			last = a[i];
-		}
-	}
-	cout << res << endl;
+    int n, m;
+    while(~scanf("%d %d", &n, &m)) {
+        for(int i = 1; i <= n; ++i) {
+            for(int j = 1; j <= m; ++j) {
+                scanf("%d", &A[i][j]);
+                B[i][j] = 0;
+            }
+        }
+
+        vector<pair<int, int> > ans;
+        for(int i = 1; i <= n; ++i) {
+            for(int j = 1; j <= m; ++j) {
+                if(A[i][j] == 1 && A[i + 1][j] == 1 && A[i][j + 1] == 1 && A[i + 1][j + 1] == 1) {
+                    ans.push_back(make_pair(i, j));
+                }
+            }
+        } 
+
+        for(int k = 0, len = ans.size(); k < len; ++k) {
+            int i = ans[k].first; int j = ans[k].second;
+            B[i][j] = 1;
+            B[i + 1][j] = 1;
+            B[i][j + 1] = 1;
+            B[i + 1][j + 1] = 1;
+        }
+
+        bool flag = true;
+        for(int i = 1; i <= n && flag; ++i) {
+            for(int j = 1; j <= m && flag; ++j) {
+                if(A[i][j] != B[i][j]) {
+                    flag = false;
+                }
+            }
+        }
+
+        if(flag == false) printf("-1\n");
+        else {
+            printf("%d\n", (int)ans.size());
+            for(int i = 0, len = ans.size(); i < len; ++i) {
+                printf("%d %d\n", ans[i].first, ans[i].second);
+            }
+        }
+
+    }
+    return 0;
 }

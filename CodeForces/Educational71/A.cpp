@@ -24,6 +24,7 @@
 #define null NULL
 #define all(a) a.begin(), a.end()
 #define forn(i, n) for (int i = 0; i < n; ++i)
+#define forw(i, l, r) for (int i = l; i < r; ++i)
 #define sz(a) (int)a.size()
 #define lson l , m , rt << 1
 #define rson m + 1 , r , rt << 1 | 1
@@ -46,20 +47,28 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
- 
+
 int main() {
-	int n; cin >> n;
-	vector<int> a(n);
-	for (int i = 0; i < n; ++i) cin >> a[i];
-	sort(begin(a), end(a));
-	int res = 0, last = 0;
-	for (int i = 0; i < n; ++i) {
-		if (a[i] - 1 > last) --a[i];
-		if (a[i] == last) ++a[i];
-		if (a[i] > last) {
-			++res;
-			last = a[i];
-		}
-	}
-	cout << res << endl;
+    int t;
+    scanf("%d", &t);
+    while(t --) {
+        int b, p, f;
+        scanf("%d %d %d", &b, &p, &f);
+        int h, c;
+        scanf("%d %d", &h, &c);
+
+        int tt = b / 2;
+
+        int ans = 0;
+        if(h > c) {
+            ans += h * min(tt, p);
+            if(tt > p) ans += c * min(tt - p, f);
+        } else {
+            ans += c * min(tt, f);
+            if(tt > f) ans += h * min(tt - f, p);
+        }
+
+        printf("%d\n", ans);
+    }
+    return 0;
 }

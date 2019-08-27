@@ -24,6 +24,7 @@
 #define null NULL
 #define all(a) a.begin(), a.end()
 #define forn(i, n) for (int i = 0; i < n; ++i)
+#define forw(i, l, r) for (int i = l; i < r; ++i)
 #define sz(a) (int)a.size()
 #define lson l , m , rt << 1
 #define rson m + 1 , r , rt << 1 | 1
@@ -46,20 +47,32 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
- 
+const int MAXN = 2e5 + 5;
+ll dp[MAXN][2];
+char seq[MAXN];
+
 int main() {
-	int n; cin >> n;
-	vector<int> a(n);
-	for (int i = 0; i < n; ++i) cin >> a[i];
-	sort(begin(a), end(a));
-	int res = 0, last = 0;
-	for (int i = 0; i < n; ++i) {
-		if (a[i] - 1 > last) --a[i];
-		if (a[i] == last) ++a[i];
-		if (a[i] > last) {
-			++res;
-			last = a[i];
-		}
-	}
-	cout << res << endl;
+    int T;
+    scanf("%d", &T);
+    while(T --) {
+        int n, a, b;
+        scanf("%d %d %d", &n, &a, &b);
+        scanf("%s", seq + 1);
+
+        dp[0][0] = 0;
+        dp[0][1] = 1e18;
+        for(int i = 1; i <= n; ++i) {
+            int tmp = (seq[i] - '0') | (seq[i + 1] - '0');
+            // debug(tmp);
+            dp[i][0] = tmp == 1 ? 1e18 : min(dp[i - 1][0] + a + b, dp[i - 1][1] + 2 * a + b);
+            dp[i][1] = min(dp[i - 1][0] + 2 * a + 2 * b, dp[i - 1][1] + a + 2 * b);
+
+        }
+        // for(int i = 1; i <= n; ++i) {
+        //     debug(dp[i][0], dp[i][1]);
+        // }
+
+        printf("%lld\n", dp[n][0] + b);
+    }
+    return 0;
 }
