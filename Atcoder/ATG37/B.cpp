@@ -1,76 +1,116 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <set>
-#include <map>
-#include <bitset>
-#include <algorithm>
-#include <iomanip>
-#include <cmath>
-#include <ctime>
-#include <functional>
-#include <unordered_set>
-#include <unordered_map>
-#include <queue>
-#include <deque>
-#include <stack>
-#include <complex>
-#include <cassert>
-#include <random>
-#include <cstring>
-#include <numeric>
-#define ll long long
-#define ld long double
-#define null NULL
-#define all(a) a.begin(), a.end()
-#define forn(i, n) for (int i = 0; i < n; ++i)
-#define sz(a) (int)a.size()
-#define lson l , m , rt << 1
-#define rson m + 1 , r , rt << 1 | 1
-template<class T> int gmax(T &a, T b) { if (b > a) { a = b; return 1; } return 0; }
-template<class T> int gmin(T &a, T b) { if (b < a) { a = b; return 1; } return 0; }
+#include <bits/stdc++.h>
+#define fio() ios_base::sync_with_stdio(false); cin.tie(NULL)
+#define int long long
+#define MOD 998244353
 using namespace std;
-string to_string(string s) { return '"' + s + '"'; }
-string to_string(const char* s) { return to_string((string) s); }
-string to_string(bool b) { return (b ? "true" : "false"); }
-template <typename A, typename B>
-string to_string(pair<A, B> p) { return "(" + to_string(p.first) + ", " + to_string(p.second) + ")"; }
-template <typename A>
-string to_string(A v) { bool first = true; string res = "{"; for (const auto &x : v) { if (!first) { res += ", "; } first = false; res += to_string(x); } res += "}"; return res; }
-void debug_out() { cerr << endl; }
-template <typename Head, typename... Tail>
-void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...); }
-#ifdef LOCAL
-#define debug(...) cerr << "[" << #__VA_ARGS__ << "]:", debug_out(__VA_ARGS__)
-#else
-#define debug(...) 42
-#endif
+int32_t main()
+{
+	fio();
+	int n;
+	cin>>n;
+	string s;
+	cin>>s;
+	int a[7]={0};
+    //  0: no color, 1: R, 2: B, 3: G, 4: RB, 5: GB, 6: RG
+	memset(a,0,sizeof(a));
+	a[0]=n;
+	int ans=1;
 
-const int MOD = 998244353;
-int main() {
-    std::ios::sync_with_stdio(false);
-    std::cin.tie(0);
-    int n;
-    while(cin >> n) {
-        string s; 
-        cin >> s;
-        int fr[5]; memset(fr, 0, sizeof(fr));
-        int to[5]; memset(to, 0, sizeof(to));
-        for(int i = 0; i < n; ++i) {
-            if(s[i] == 'R') fr[0] ++;
-            else if(s[i] == 'B') fr[1] ++;
-            else fr[2] ++;
-        }
+	for(int i=0;i<3*n;i++)
+	{
+		if(s[i]=='R')
+		{
+			if(a[5]>0)
+			{
+				ans*=a[5];
+				ans%=MOD;
+				a[5]--;
+			}
+			else if(a[2]>0)
+			{
+				ans*=a[2];
+				ans%=MOD;
+				a[2]--;
+				a[4]++;
+			}
+			else if(a[3]>0)
+			{
+				ans*=a[3];
+				ans%=MOD;
+				a[3]--;
+				a[6]++;
+			}
+			else
+			{
+				ans*=a[0];
+				ans%=MOD;
+				a[0]--;
+				a[1]++;
+				//cout<<ans<<endl;
+			}
+		}
+		else if(s[i]=='B')
+		{
+			if(a[6]>0)
+			{
+				ans*=a[6];
+				ans%=MOD;
+				a[6]--;
+			}
+			else if(a[1]>0)
+			{
+				ans*=a[1];
+				ans%=MOD;
+				a[1]--;
+				a[4]++;
+			}
+			else if(a[3]>0)
+			{
+				ans*=a[3];
+				ans%=MOD;
+				a[3]--;
+				a[5]++;
+			}
+			else
+			{
+				ans*=a[0];
+				ans%=MOD;
+				a[0]--;
+				a[2]++;
+			}
+		}
+		else
+		{
+			if(a[4]>0)
+			{
+				ans*=a[4];
+				ans%=MOD;
+				a[4]--;
+			}
+			else if(a[1]>0)
+			{
+				ans*=a[1];
+				ans%=MOD;
+				a[1]--;
+				a[6]++;
+			}
+			else if(a[2]>0)
+			{
+				ans*=a[2];
+				ans%=MOD;
+				a[2]--;
+				a[5]++;
+			}
+			else
+			{
+				ans*=a[0];
+				ans%=MOD;
+				a[0]--;
+				a[3]++;
+			}
+		}
+		//cout<<ans<<endl;
+	}
 
-        for(int i = 2*n; i < 3*n; ++i) {
-            if(s[i] == 'R') to[0] ++;
-            else if(s[i] == 'B') to[1] ++;
-            else to[2] ++;
-        }
-
-        
-
-        printf("%lld\n", ans);
-    }
-    return 0;
+	cout<<ans;
 }

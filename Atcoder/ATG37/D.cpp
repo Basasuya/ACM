@@ -1,81 +1,60 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <set>
-#include <map>
-#include <bitset>
-#include <algorithm>
-#include <iomanip>
-#include <cmath>
-#include <ctime>
-#include <functional>
-#include <unordered_set>
-#include <unordered_map>
-#include <queue>
-#include <deque>
-#include <stack>
-#include <complex>
-#include <cassert>
-#include <random>
-#include <cstring>
-#include <numeric>
-#define ll long long
-#define ld long double
-#define null NULL
-#define all(a) a.begin(), a.end()
-#define forn(i, n) for (int i = 0; i < n; ++i)
-#define sz(a) (int)a.size()
-#define lson l , m , rt << 1
-#define rson m + 1 , r , rt << 1 | 1
-template<class T> int gmax(T &a, T b) { if (b > a) { a = b; return 1; } return 0; }
-template<class T> int gmin(T &a, T b) { if (b < a) { a = b; return 1; } return 0; }
+#include <bits/stdc++.h>
 using namespace std;
-string to_string(string s) { return '"' + s + '"'; }
-string to_string(const char* s) { return to_string((string) s); }
-string to_string(bool b) { return (b ? "true" : "false"); }
-template <typename A, typename B>
-string to_string(pair<A, B> p) { return "(" + to_string(p.first) + ", " + to_string(p.second) + ")"; }
-template <typename A>
-string to_string(A v) { bool first = true; string res = "{"; for (const auto &x : v) { if (!first) { res += ", "; } first = false; res += to_string(x); } res += "}"; return res; }
-void debug_out() { cerr << endl; }
-template <typename Head, typename... Tail>
-void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...); }
-#ifdef LOCAL
-#define debug(...) cerr << "[" << #__VA_ARGS__ << "]:", debug_out(__VA_ARGS__)
-#else
-#define debug(...) 42
-#endif
+#define rep(i,a,n) for (int i=a;i<n;i++)
+#define per(i,a,n) for (int i=n-1;i>=a;i--)
+#define pb push_back
+#define mp make_pair
+#define all(x) (x).begin(),(x).end()
+#define fi first
+#define se second
+#define SZ(x) ((int)(x).size())
+typedef vector<int> VI;
+typedef long long ll;
+typedef pair<int,int> PII;
+mt19937 mrand(random_device{}()); 
+const ll mod=1000000007;
+int rnd(int x) { return mrand() % x;}
+ll powmod(ll a,ll b) {ll res=1;a%=mod; assert(b>=0); for(;b;b>>=1){if(b&1)res=res*a%mod;a=a*a%mod;}return res;}
+ll gcd(ll a,ll b) { return b?gcd(b,a%b):a;}
+// head
 
-const int MAXN = 105;
-int A[MAXN][MAXN];
-int B[MAXN][MAXN];
-int C[MAXN][MAXN];
-
+const int N=110,M=10100;
+int n,m,x,used[M],vis[N],p[N],g[N][N],rp[N][N];
+VI row[N],cc[N],rr[N];
+int dfs(int u) {
+	rep(v,0,n) if (g[u][v]&&!vis[v]) {
+		vis[v]=1;
+		if (p[v]==-1||dfs(p[v])) { p[v]=u; return 1;}
+	}
+	return 0;
+}
 
 int main() {
-    int n, m;
-    while(~scanf("%d %d", &n, &m)) {
-        memset(B, -1, sizeof(B));
-        memset(C, -1, sizeof(C));
+	scanf("%d%d",&n,&m);
+	rep(i,0,n) rep(j,0,m) {
+		scanf("%d",&x); --x;
+		row[i].pb(x);
+	}
+	rep(col,0,m) {
+		rep(i,0,n) rep(j,0,n) g[i][j]=0,rp[i][j]=-1;
+		rep(i,0,n) for (auto x:row[i]) if (!used[x]) {
+			g[i][x/m]=1; rp[i][x/m]=x;
+		}
+		rep(i,0,n) p[i]=-1;
+		rep(i,0,n) {
+			memset(vis,0,sizeof(vis));
+			assert(dfs(i));
+		}
+		rep(i,0,n) {
+			int x=rp[p[i]][i];
+			assert(x!=-1);
+			used[x]=1;
+			rr[p[i]].pb(x);
+			cc[col].pb(x);
+		}
+	}
+	rep(i,0,n) rep(j,0,m) printf("%d%c",rr[i][j]+1," \n"[j==m-1]);
+	rep(j,0,m) sort(all(cc[j]));
+	rep(i,0,n) rep(j,0,m) printf("%d%c",cc[j][i]+1," \n"[j==m-1]);
 
-        for(int i = 1; i <= n; ++i) {
-            for(int j = 1; j <= m; ++j) {
-                scanf("%d", &A[i][j]);
-            }
-        }
-
-        vector<int> col[105];
-        for(int i = 1; i <= n; ++i) {
-            for(int j = 1; j <= m; ++j) {
-                col[(A[i][j] - 1) / m].push_back(A[i][j]);
-            }
-        }
-
-        for(int i = 0; i < n; ++i) {
-            for(int j = 0; j < m; ++j) {
-                
-            }
-        }
-    }
-    return 0;
 }
