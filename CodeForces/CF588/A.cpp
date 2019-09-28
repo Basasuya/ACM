@@ -20,6 +20,7 @@
 #include <random>
 #include <cstring>
 #include <numeric>
+#define mp make_pair
 #define ll long long
 #define ld long double
 #define null NULL
@@ -47,42 +48,14 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-const int MAXN = 2e5 + 5;
-int A[MAXN];
-
 int main() {
-    int n, k;
-    while(~scanf("%d %d", &n, &k)) {
-        for(int i = 0; i < n; ++i) {
-            scanf("%d", &A[i]);
-        }
-        
-        int ans = n - k + 1;
-        set<int> st;
-        for(int i = 0; i < k; ++i) {
-            st.insert(A[i]);
-        }
-        for(int i = 0; i < n; ++i) {
-            int p1 = i; int p2 = i + k - 1;
-            
-            if(p2 + 1 >= n) break;
-            debug(A[p1], A[p2 + 1]);
-            if(A[p1] == *st.begin() && *(--st.end()) < A[p2 + 1]) {
-                debug(i);
-                ans --;
-            }
-            st.erase(A[p1]);
-            st.insert(A[p2 + 1]);
-        }
-        printf("%d\n", ans);
+    int a1, a2, a3, a4;
+    while(~scanf("%d %d %d %d", &a1, &a2, &a3, &a4)) {
+        vector<int> tmp;
+        tmp.push_back(a1); tmp.push_back(a2); tmp.push_back(a3); tmp.push_back(a4);
+        sort(tmp.begin(), tmp.end());
+        if(tmp[0] + tmp[3] == tmp[2] + tmp[1] || tmp[0] + tmp[1] + tmp[2] == tmp[3]) printf("YES\n");
+        else printf("NO\n"); 
     }
     return 0;
 }
-
-/*
-1000000000
-2
-217983653
-336916467
-
-*/

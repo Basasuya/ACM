@@ -47,42 +47,48 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-const int MAXN = 2e5 + 5;
-int A[MAXN];
+// int mp[10][10];
+int fr[100], to[100];
+int n, m;
 
+int solve(int x, int y) {
+    map<int, int> id;
+    for(int i = 1, cnt = 2; i <= 7; ++i) {
+        if(i == x || i == y) {
+            id[i] = 1;
+        } else id[i] = cnt ++;
+    }
+    set<pair<int, int> > st;
+    for(int i = 0; i < m; ++i) {
+        int a = id[fr[i]]; int b = id[to[i]];
+        if(a > b) swap(a, b);
+        st.insert(make_pair(a, b));
+    }
+    return (int)st.size();
+}
 int main() {
-    int n, k;
-    while(~scanf("%d %d", &n, &k)) {
-        for(int i = 0; i < n; ++i) {
-            scanf("%d", &A[i]);
+    
+    while(~scanf("%d %d", &n, &m)) {
+        // memset(mp, 0, sizeof(mp));
+        for(int i = 0; i < m; ++i) {
+            scanf("%d %d", &fr[i], &to[i]);
+            // mp[fr[i]][to[i]] = 1;
         }
-        
-        int ans = n - k + 1;
-        set<int> st;
-        for(int i = 0; i < k; ++i) {
-            st.insert(A[i]);
-        }
-        for(int i = 0; i < n; ++i) {
-            int p1 = i; int p2 = i + k - 1;
-            
-            if(p2 + 1 >= n) break;
-            debug(A[p1], A[p2 + 1]);
-            if(A[p1] == *st.begin() && *(--st.end()) < A[p2 + 1]) {
-                debug(i);
-                ans --;
+
+        if(m == 0) {
+            printf("0\n");
+        } else if(n <= 6) {
+            printf("%d\n", m);
+        } else {
+            int ans = -1;
+            for(int i = 1; i <= 7; ++i) {
+                for(int j = i + 1; j <= 7; ++j) {
+                    ans = max(ans, solve(i, j));
+                }
             }
-            st.erase(A[p1]);
-            st.insert(A[p2 + 1]);
+            printf("%d\n", ans);
         }
-        printf("%d\n", ans);
+
     }
     return 0;
 }
-
-/*
-1000000000
-2
-217983653
-336916467
-
-*/

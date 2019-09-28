@@ -48,41 +48,35 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #endif
 
 const int MAXN = 2e5 + 5;
-int A[MAXN];
+char seq[MAXN];
 
 int main() {
     int n, k;
     while(~scanf("%d %d", &n, &k)) {
-        for(int i = 0; i < n; ++i) {
-            scanf("%d", &A[i]);
+        scanf("%s", seq);
+        if(k == 0) {
+            printf("%s\n", seq);
+            continue;
         }
-        
-        int ans = n - k + 1;
-        set<int> st;
-        for(int i = 0; i < k; ++i) {
-            st.insert(A[i]);
+
+        if(n == 1) {
+            printf("0\n");
+            continue;
         }
-        for(int i = 0; i < n; ++i) {
-            int p1 = i; int p2 = i + k - 1;
-            
-            if(p2 + 1 >= n) break;
-            debug(A[p1], A[p2 + 1]);
-            if(A[p1] == *st.begin() && *(--st.end()) < A[p2 + 1]) {
-                debug(i);
-                ans --;
+
+        if(seq[0] != '1' && k) {
+            seq[0] = '1';
+            k --;
+        }
+        for(int i = 1; i < n; ++i) {
+            if(k == 0) break;
+            if(seq[i] != '0') {
+                seq[i] = '0';
+                k --;
             }
-            st.erase(A[p1]);
-            st.insert(A[p2 + 1]);
         }
-        printf("%d\n", ans);
+
+        printf("%s\n", seq);
     }
     return 0;
 }
-
-/*
-1000000000
-2
-217983653
-336916467
-
-*/
