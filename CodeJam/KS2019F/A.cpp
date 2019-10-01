@@ -47,7 +47,72 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
+const int MAXN = 105;
+const int INF = 0x3f3f3f3f;
+int A[MAXN];
+int dp[MAXN][MAXN];
 
 int main() {
-    
+    int T;
+    scanf("%d", &T);
+    for(int cas = 1; cas <= T; ++cas) {
+        int n, k;
+        scanf("%d %d", &n, &k);
+        k ++;
+        for(int i = 1; i <= n; ++i) {
+            scanf("%d", &A[i]);
+        }
+        memset(dp, INF, sizeof(dp));
+
+        dp[1][1] = 0;
+        for(int i = 2; i <= n; ++i) {
+            int maxx = -1; int maxpos = -1;
+            map<int, int> mp;
+
+            for(int j = i; j > 0; --j) {
+                mp[A[j]] ++;
+                if(mp[A[j]] > maxx) {
+                    maxx = mp[A[j]];
+                    maxpos = A[j];
+                } 
+
+                for(int l = 1; l <= k; ++l) {
+                    dp[i][l] = min(dp[i][l], dp[j-1][l - 1] + (i - j + 1 - maxx) );
+                }
+            }
+            // debug(i);
+            // debug(maxx);
+
+            
+
+            dp[i][1] = min(dp[i][1], i - maxx);
+            // for(int l = 0; l <= k; ++l) debug(dp[i][l]); printf("\n");
+        }
+
+        int ans = INF;
+        // for(int i = 1; i <= n; ++i) {
+            for(int j = 0; j <= k; ++j) {
+                ans = min(ans, dp[n][j]);
+            }
+        // }
+
+        printf("Case #%d: ", cas);
+        printf("%d\n", ans);
+    }
+    return 0;
 }
+
+/*
+
+
+4
+8 2
+300 100 300 300 200 100 800 500
+5 3
+100 100 100 100 3
+7 3
+10 20 40 10 10 30 30
+10 2
+30 30 60 60 90 90 60 60 30 30
+
+*/
