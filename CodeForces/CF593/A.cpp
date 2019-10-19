@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iostream>
 #include <fstream>
 #include <vector>
 #include <set>
@@ -48,53 +49,19 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-
-ll exgcd(ll a,ll b,ll &x,ll &y) {
-    if(b==0) {            
-        x=1; y=0;
-        return a;
-    }
-    ll r=exgcd(b, a%b, x, y);
-    ll t=y;
-    y=x-(a/b)*y;  
-    x=t;
-    return r;
-}
-
-ll gcd(ll x, ll y) {
-    if(y == 0) return x;
-    else return gcd(y, x % y);
-}
-
-// ll numberClose(ll x, ll y, ll mod) { // y + mod * t - > x
-//     ll tmpY = y % mod;
-//     if(tmpY < 0) tmpY += mod;
-//     if(tmpY > x) return tmpY; 
-//     else return (x - tmpY) / mod * mod + tmpY;
-// } 
 int main() {
-    ll n, p, w, d;
-    while(~scanf("%lld %lld %lld %lld", &n, &p, &w, &d)) {
-        ll tmp = gcd(w, d);
-        if(p % tmp != 0) {
-            printf("-1\n"); continue;
-        } 
-
-        ll x, y;
-        ll r = exgcd(w, d, x, y);
-        
-        ll minT = ceil(-p / w * y);
-        ll maxT = floor(p / d * x);
-        maxT = min(maxT, floor( (n * r - p * x - p * y) / (w - d) ));
-        if(maxT < minT) {
-            printf("-1\n"); continue;
-        } 
-        debug(minT, maxT, x, y);
-
-        ll _x = (p / r * x - d / r * minT);
-        ll _y = (p / r * y + w / r * minT);
-        ll _z = n - _x - _y;
-        printf("%lld %lld %lld\n", _x, _y, _z);
+    int T;
+    scanf("%d", &T);
+    while(T --) {
+        int a, b, c;
+        scanf("%d %d %d", &a, &b, &c);
+        int ans = -1;
+        for(int i = 0; i <= a; ++i) {
+            int _b = b - i * 2;
+            if(_b < 0) break;
+            ans = max(ans, 3 * i + min(_b, c / 2) * 3);
+        }
+        printf("%d\n", ans);
     }
     return 0;
 }

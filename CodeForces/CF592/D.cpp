@@ -48,53 +48,54 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
+const int MAXN = 1e5 + 5;
+int A[MAXN];
 
-ll exgcd(ll a,ll b,ll &x,ll &y) {
-    if(b==0) {            
-        x=1; y=0;
-        return a;
-    }
-    ll r=exgcd(b, a%b, x, y);
-    ll t=y;
-    y=x-(a/b)*y;  
-    x=t;
-    return r;
-}
-
-ll gcd(ll x, ll y) {
-    if(y == 0) return x;
-    else return gcd(y, x % y);
-}
-
-// ll numberClose(ll x, ll y, ll mod) { // y + mod * t - > x
-//     ll tmpY = y % mod;
-//     if(tmpY < 0) tmpY += mod;
-//     if(tmpY > x) return tmpY; 
-//     else return (x - tmpY) / mod * mod + tmpY;
-// } 
 int main() {
-    ll n, p, w, d;
-    while(~scanf("%lld %lld %lld %lld", &n, &p, &w, &d)) {
-        ll tmp = gcd(w, d);
-        if(p % tmp != 0) {
-            printf("-1\n"); continue;
-        } 
+    int n;
+    ll k;
+    while(~scanf("%d %lld", &n, &k)) {
+        map<int, int> mp;
+        set<int> st;
+        for(int i = 0; i < n; ++i) {
+            scanf("%d", &A[i]);
+            mp[A[i]] ++;
+            st.insert(A[i]);
+        }
+        while(1) {
+            if(st.size() == 1) break;
+            int minn = *st.begin();
+            int maxx = *(--st.end());
+            int minnNum = mp[minn];
+            int maxxNum = mp[maxx];
+            // debug(minn, maxx, minnNum, maxxNum);
+            if(minnNum > maxxNum) {  
+                mp.erase(mp.find(maxx));
+                st.erase(maxx);
+                int nextMaxx = *(--st.end());
+                mp[nextMaxx] += maxxNum;
+                if(1ll * maxxNum * (maxx - nextMaxx) <= k) {
+                    k -= 1ll * maxxNum * (maxx - nextMaxx);
+                } else {
+                    st.insert(maxx - k / maxxNum);
+                    break;
+                }
+            } else {
+                mp.erase(mp.find(minn));
+                st.erase(minn);
+                int nextMinn = *st.begin();
+                mp[nextMinn] += minnNum;
+                if(1ll * minnNum * (nextMinn - minn) <= k) {
+                    k -= 1ll * minnNum * (nextMinn - minn);
+                } else {
+                    st.insert(minn + k / minnNum);
+                    break;
+                }
+            }
+            // debug(mp);
+        }
 
-        ll x, y;
-        ll r = exgcd(w, d, x, y);
-        
-        ll minT = ceil(-p / w * y);
-        ll maxT = floor(p / d * x);
-        maxT = min(maxT, floor( (n * r - p * x - p * y) / (w - d) ));
-        if(maxT < minT) {
-            printf("-1\n"); continue;
-        } 
-        debug(minT, maxT, x, y);
-
-        ll _x = (p / r * x - d / r * minT);
-        ll _y = (p / r * y + w / r * minT);
-        ll _z = n - _x - _y;
-        printf("%lld %lld %lld\n", _x, _y, _z);
+        printf("%d\n", *(--st.end()) - *st.begin());
     }
     return 0;
 }
