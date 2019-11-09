@@ -46,4 +46,17 @@ int main() {
             isPrime[j] = 1;
         }
     }
+
+    for(int i = 1; i <= primeTot; ++i) {
+        if(1ll * Prime[i] * Prime[i] > n) break;
+        if(n % Prime[i] == 0) {
+            while(n % Prime[i] == 0) {
+                n /= Prime[i];
+            }
+            st.insert(Prime[i]);
+        }
+    }
+    if(n != 1) {
+        st.insert(n);
+    }
 }
