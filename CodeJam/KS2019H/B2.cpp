@@ -191,7 +191,8 @@ int solve2(int ty) {
         }
     }
     vector<int> diagnol;
-    int target = (s2.size() + 1) / 2;
+    int target = s2.size() / 2;
+    if(n % 2) target --;
     for(int i = 0, len = s2[target].size(); i < len; ++i) {
         int x = s2[target][i].first; int y = s2[target][i].second;
         
@@ -213,7 +214,7 @@ int solve2(int ty) {
         }
     }
 
-    for(int i = target % 2; i < s2.size();i += 2) {
+    for(int i = 1; i < s2.size();i += 2) {
         for(auto Point : s2[i]) {
             int x = Point.first; int y = Point.second;
             if(tmp[x][y] == 0) {
