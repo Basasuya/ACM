@@ -47,3 +47,64 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #else
 #define debug(...) 42
 #endif
+
+int A[10];
+int dp[2][200][15];
+
+int main() {
+    int T;
+    scanf("%d", &T);
+    for(int cas = 1; cas <= T; ++cas) {
+        int sum = 0;
+        for(int i = 1; i <= 9; ++i) {
+            scanf("%d", &A[i]);
+            if(A[i] > 20) A[i] = 20 + A[i] % 2;
+            sum += A[i];
+        }
+
+        int odd = (sum + 1) / 2;
+        int even = sum / 2;
+        
+        int fl = 0;
+        int preSum = 0;
+        for(int i = 0; i <= odd; ++i) {
+            for(int j = 0; j < 11; ++j) {
+                dp[0][i][j] = 0; dp[1][i][j] = 0;
+            }
+        }
+        dp[fl][0][0] = 1;
+        for(int l = 1; l <= 9; ++l) {
+            for(int i = 0; i <= preSum; ++i) {
+                int j = preSum - i;
+                // for(int j = 0; j <= even; ++j) {
+                    for(int k = 0; k <= A[l]; ++k) {
+                        if(i + k <= odd & j + A[l] - k <= even) {
+                            int tt = (11 + k * l % 11 - (A[l] - k) * l % 11) % 11;
+                            for(int o = 0; o < 11; ++o) {
+                                dp[fl ^ 1][i + k][ (o + tt) % 11] += dp[fl][i][o];
+                            }
+                        }
+                    }
+                // }
+            }   
+            
+            preSum += A[l];
+
+            for(int i = 0; i <= preSum; ++i) {
+                // for(int j = 0; j <= even; ++j) {
+                    for(int o = 0; o < 11; ++o) {
+                        dp[fl][i][o] = 0;
+                    }
+                // }
+            }
+            fl ^= 1;
+                     
+        }
+
+        printf("Case #%d: ", cas);
+
+        printf("%s\n", dp[fl][odd][0] > 0 ? "YES" : "NO");
+
+    }
+    return 0;
+}
