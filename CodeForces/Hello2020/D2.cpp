@@ -1,104 +1,82 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
  
 using namespace std;
  
+#define all(x) begin(x), end(x)
+const int maxn = 4e5 + 42;
  
-struct seg{
-	int a, b, c, d;
-};
+int hashed[maxn];
+vector<int> ops[2][maxn], cls[2][maxn];
+int inter[2][maxn];
  
-bool sort1(const seg& a, const seg& b){
-	return a.a < b.a;
-}
- 
-bool sort2(const seg& a, const seg& b){
-	return a.c < b.c;
-}
- 
-bool check(vector<seg>& c){
-	int n = c.size();
-	
-	sort(c.begin(), c.end(), sort1);
-	long long check1 = 0;
-	
-	for(int i = 0; i < n; i++){
-		//binary search to find right endpoint
-		
-		int low = i, high = n-1, mid;
-		while(low < high){
-			mid = (low + high + 1)/2;
-			
-			if(c[i].b >= c[mid].a){ //intersect
-				low = mid;
-			}else{
-				high = mid-1;
-			}
+int xr[2][4 * maxn];
+void add(int z, int p, int c, int v = 1, int l = 0, int r = maxn) {
+	xr[z][v] ^= c;
+	if(r - l > 1) {
+		int m = (l + r) / 2;
+		if(p < m) {
+			add(z, p, c, 2 * v, l, m);
+		} else {
+			add(z, p, c, 2 * v + 1, m, r);
 		}
-		mid = (low + high + 1)/2;
-		//mid is the one which intersects
-		
-		check1 += mid - i;
 	}
-	
-	sort(c.begin(), c.end(), sort2);
-	long long check2 = 0;
-	
-	for(int i = 0; i < n; i++){
-		//binary search to find right endpoint
-		
-		int low = i, high = n-1, mid;
-		while(low < high){
-			mid = (low + high + 1)/2;
-			
-			if(c[i].d >= c[mid].c){ //intersect
-				low = mid;
-			}else{
-				high = mid-1;
-			}
-		}
-		mid = (low + high + 1)/2;
-		//mid is the one which intersects
-		
-		check2 += mid - i;
+}
+int get(int z, int a, int b, int v = 1, int l = 0, int r = maxn) {
+	if(a <= l && r <= b) {
+		return xr[z][v];
+	} else if(r <= a || b <= l) {
+		return 0;
+	} else {
+		int m = (l + r) / 2;
+		return get(z, a, b, 2 * v, l, m) ^ get(z, a, b, 2 * v + 1, m, r);
 	}
-	//cout<<"CHECK "<<check1<<" "<<check2<<endl;
-	return check2 == check1;
-	
 }
  
+void process(int *op, int *cl, int n, int z) {
+	for(int i = 0; i < n; i++) {
+		ops[z][op[i]].push_back(i);
+		cls[z][cl[i]].push_back(i);
+	}
+	for(int i = 0; i < maxn; i++) {
+		for(auto it: ops[z][i]) {
+			add(z, cl[it], hashed[it]);
+		}
+		for(auto it: cls[z][i]) {
+			inter[z][it] = get(z, op[it], maxn);
+		}
+	}
+}
  
-signed main(){
-	ios::sync_with_stdio(false); 
+signed main() {
+    mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+	//freopen("input.txt", "r", stdin);
+	ios::sync_with_stdio(0);
 	cin.tie(0);
-	srand(time(NULL));
-	int n; cin>>n;
-	vector<seg> a(n);
-	mt19937 rng;
-	for(int i = 0; i < n; i++){
-		cin>>a[i].a>>a[i].b>>a[i].c>>a[i].d;
+	int n;
+	cin >> n;
+	int sa[n], ea[n], sb[n], eb[n];
+	vector<int> alls;
+	for(int i = 0; i < n; i++) {
+		cin >> sa[i] >> ea[i] >> sb[i] >> eb[i];
+		alls.insert(end(alls), {sa[i], ea[i], sb[i], eb[i]});
+		hashed[i] = rng();
 	}
-	
-	for(int i = 0; i < 60; i++){
-		vector<seg> c;
-		c.reserve(n);
-		//cout<<"S "<<endl;
-		for(int j = 0; j < n; j++){
-			if(rng()%2 == 0){
-				c.push_back(a[j]);
-		//		cout<<j<<" ";
-			}
-		}
-		//cout<<endl;
-		
-		//check
-		bool ans = check(c);
-		if(!ans){
- 
-			cout<<"NO"<<endl;
+	sort(all(alls));
+	alls.erase(unique(all(alls)), end(alls));
+	for(int i = 0; i < n; i++) {
+		sa[i] = lower_bound(all(alls), sa[i]) - begin(alls);
+		ea[i] = lower_bound(all(alls), ea[i]) - begin(alls);
+		sb[i] = lower_bound(all(alls), sb[i]) - begin(alls);
+		eb[i] = lower_bound(all(alls), eb[i]) - begin(alls);
+	}
+	process(sa, ea, n, 0);
+	process(sb, eb, n, 1);
+	for(int i = 0; i < n; i++) {
+		if(inter[0][i] != inter[1][i]) {
+			cout << "NO" << endl;
 			return 0;
-		}else{
 		}
 	}
-	cout<<"YES"<<endl;
-	
+	cout << "YES" << endl;
+	return 0;
 }

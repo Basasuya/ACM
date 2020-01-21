@@ -19,7 +19,7 @@
 #include <random>
 #include <cstring>
 #include <numeric>
-#define mp make_pair
+#define MP make_pair
 #define ll long long
 #define ld long double
 #define null NULL
@@ -48,31 +48,35 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-inline int read(){
-	int x=0,f=1;char ch=getchar();
-	while(ch<'0'||ch>'9'){if(ch=='-')f=-1;ch=getchar();}
-	while(ch>='0'&&ch<='9'){x=x*10+ch-'0';ch=getchar();}
-	return x*f;
+int main() {
+    ll x0, y0, ax, ay, bx, by;
+    ll xs, ys, t;
+    while(~scanf("%lld %lld %lld %lld %lld %lld", &x0, &y0, &ax, &ay, &bx, &by)) {
+        scanf("%lld %lld %lld", &xs, &ys, &t);
+
+        vector<pair<ll, ll> > vc;
+        while(x0 <= xs + t && y0 <= ys + t) {
+            // debug("yingyingying");
+            if(x0 >= xs - t && y0 >= ys - t) {
+                vc.push_back(MP(x0, y0));
+            }
+            x0 = ax * x0 + bx;
+            y0 = ay * y0 + by;
+        }
+
+        // debug(vc);
+
+        int ans = 0;
+        int n = vc.size();
+        for(int i = 0; i < n; ++i) {
+            for(int j = i; j < n; ++j) {
+                ll dis = min( abs(vc[j].first - xs) + abs(vc[j].second - ys), abs(vc[i].first - xs) + abs(vc[i].second - ys) ) + (vc[j].first - vc[i].first) + (vc[j].second - vc[i].second);
+
+                if(dis <= t) ans = max(ans, j - i + 1);
+            }
+        }
+
+        printf("%d\n", ans);
+    }
+    return 0;
 }
-const int maxn=2e5+5;
-const int mod=998244353;
-int n,p[maxn];
-inline int ksm(int x,int k){
-	int s=1;
-	for(;k;k>>=1,x=1ll*x*x%mod)if(k&1)s=1ll*s*x%mod;
-	return s;
-}
-int dp[maxn];
-int main(){
-	n=read();
-	int inv=ksm(100,mod-2);
-	for(int i=1;i<=n;i++){
-		p[i]=read();
-		p[i]=1ll*p[i]*inv%mod;
-	}
-	dp[1]=0;
-	for(int i=2;i<=n+1;i++)dp[i]=1ll*(dp[i-1]+1)*ksm(p[i-1],mod-2)%mod;
-	cout<<dp[n+1]<<'\n';
-	return 0;
-}
- 

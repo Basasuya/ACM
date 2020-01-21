@@ -19,7 +19,7 @@
 #include <random>
 #include <cstring>
 #include <numeric>
-#define mp make_pair
+#define MP make_pair
 #define ll long long
 #define ld long double
 #define null NULL
@@ -48,31 +48,33 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-inline int read(){
-	int x=0,f=1;char ch=getchar();
-	while(ch<'0'||ch>'9'){if(ch=='-')f=-1;ch=getchar();}
-	while(ch>='0'&&ch<='9'){x=x*10+ch-'0';ch=getchar();}
-	return x*f;
+const int MAXN = 1e5 + 5;
+int puzzle[3][MAXN];
+int main() {
+    int n, q;
+    while(~scanf("%d %d", &n, &q)) {
+        set<pair<int, int> > st;
+
+        for(int i = 0; i < q; ++i) {
+            int r, c;
+            scanf("%d %d", &r, &c);
+            int _r = r == 1 ? 2 : 1;
+            if(puzzle[r][c] == 0) {
+                for(int j = -1; j <= 1; ++j) {
+                    if(puzzle[_r][c + j] == 1) {
+                        st.insert(r == 1 ? MP(c, c + j) : MP(c + j, c));
+                    }
+                }
+            } else {
+                for(int j = -1; j <= 1; ++j) {
+                    if(puzzle[_r][c + j] == 1) {
+                        st.erase(r == 1 ? MP(c, c + j) : MP(c + j, c));
+                    }
+                }
+            }
+            puzzle[r][c] ^= 1;
+
+            printf("%s\n", (st.size() == 0) ? "Yes" : "No");
+        }
+    }
 }
-const int maxn=2e5+5;
-const int mod=998244353;
-int n,p[maxn];
-inline int ksm(int x,int k){
-	int s=1;
-	for(;k;k>>=1,x=1ll*x*x%mod)if(k&1)s=1ll*s*x%mod;
-	return s;
-}
-int dp[maxn];
-int main(){
-	n=read();
-	int inv=ksm(100,mod-2);
-	for(int i=1;i<=n;i++){
-		p[i]=read();
-		p[i]=1ll*p[i]*inv%mod;
-	}
-	dp[1]=0;
-	for(int i=2;i<=n+1;i++)dp[i]=1ll*(dp[i-1]+1)*ksm(p[i-1],mod-2)%mod;
-	cout<<dp[n+1]<<'\n';
-	return 0;
-}
- 
