@@ -48,25 +48,16 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-
-const int MAXN = 2e5 + 5;
-int tree[MAXN];
-int treesize;
-int Sum(int x) {
-    if(x <= 0) return 0;
-    if(x > treesize) x = treesize;
-    int ans = 0;
-    while(x > 0) {
-        ans += tree[x];
-        x -= x & -x;
+int main() {
+    int T;
+    scanf("%d", &T);
+    while(T --) {
+        int a, b, c, n;
+        scanf("%d %d %d %d", &a, &b, &c, &n);
+        int maxUnit = max(max(a, b), c);
+        int sum = (maxUnit - a) + (maxUnit - b) + (maxUnit - c);
+        if(n >= sum && (n - sum) % 3 == 0) printf("YES\n");
+        else printf("NO\n");
     }
-    return ans;
+    return 0;
 }
-void Add(int x, int d) {
-    // debug(x);
-    while(x <= treesize) {
-        tree[x] += d;
-        x += x & -x;
-    }
-}
-

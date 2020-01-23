@@ -1,25 +1,25 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <set>
-#include <map>
-#include <bitset>
 #include <algorithm>
-#include <iomanip>
-#include <cmath>
-#include <ctime>
-#include <functional>
-#include <unordered_set>
-#include <unordered_map>
-#include <queue>
-#include <deque>
-#include <stack>
-#include <complex>
+#include <bitset>
 #include <cassert>
-#include <random>
+#include <cmath>
+#include <complex>
 #include <cstring>
+#include <ctime>
+#include <deque>
+#include <fstream>
+#include <functional>
+#include <iomanip>
+#include <iostream>
+#include <map>
 #include <numeric>
-#define mp make_pair
+#include <queue>
+#include <random>
+#include <set>
+#include <stack>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+#define MP make_pair
 #define ll long long
 #define ld long double
 #define null NULL
@@ -48,25 +48,50 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
+const int MAXN = 1e5 + 5;
+int A[MAXN];
+const int INF = 0x3f3f3f3f;
 
-const int MAXN = 2e5 + 5;
-int tree[MAXN];
-int treesize;
-int Sum(int x) {
-    if(x <= 0) return 0;
-    if(x > treesize) x = treesize;
-    int ans = 0;
-    while(x > 0) {
-        ans += tree[x];
-        x -= x & -x;
-    }
-    return ans;
-}
-void Add(int x, int d) {
-    // debug(x);
-    while(x <= treesize) {
-        tree[x] += d;
-        x += x & -x;
-    }
-}
+int main() {
+    int T;
+    scanf("%d", &T);
+    while(T --) {
+        int n;
+        scanf("%d", &n);
+        bool allPos = true;
+        ll ans = 0;
+        for(int i = 0; i < n; ++i) {
+            scanf("%d", &A[i]);
+            ans += A[i];
+            if(A[i] <= 0) allPos = false;
+        } 
 
+        ll result = -INF;
+
+        {
+            ll partSum = -INF;
+            ll sum = -INF;
+            for(int i = 1; i < n; ++i) {
+                sum = max(sum + A[i], 1ll * A[i]);
+                partSum = max(partSum, sum);
+            }
+            result = max(result, partSum);
+        }
+
+        {
+            ll partSum = -INF;
+            ll sum = -INF;
+            for(int i = 0; i < n - 1; ++i) {
+                sum = max(sum + A[i], 1ll * A[i]);
+                partSum = max(partSum, sum);
+            }
+            result = max(result, partSum);
+        }
+
+        // debug(partSum);
+
+        if(result < ans) printf("YES\n");
+        else printf("NO\n");
+    }
+    return 0;
+}

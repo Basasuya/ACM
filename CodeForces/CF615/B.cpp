@@ -48,25 +48,65 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
+const int MAXN = 1005;
 
-const int MAXN = 2e5 + 5;
-int tree[MAXN];
-int treesize;
-int Sum(int x) {
-    if(x <= 0) return 0;
-    if(x > treesize) x = treesize;
-    int ans = 0;
-    while(x > 0) {
-        ans += tree[x];
-        x -= x & -x;
-    }
-    return ans;
-}
-void Add(int x, int d) {
-    // debug(x);
-    while(x <= treesize) {
-        tree[x] += d;
-        x += x & -x;
-    }
+struct Node{
+    int x, y;
+} E[1005];
+
+bool cmp(Node &A, Node &B) {
+    if(A.x != B.x) return A.x < B.x;
+    else return A.y < B.y;
 }
 
+int main() {
+    int T;
+    scanf("%d", &T);
+    while(T --) {
+        int n;
+        scanf("%d", &n);
+        for(int i = 0; i < n; ++i) {
+            scanf("%d %d", &E[i].x, &E[i].y);
+        }
+
+        sort(E, E + n, cmp);
+        vector<char> ans;
+        bool suc = true;
+
+        for(int j = 0; j < E[0].x; ++j) {
+            ans.push_back('R');
+        }
+        for(int j = 0; j < E[0].y; ++j) {
+            ans.push_back('U');
+        } 
+
+        for(int i = 0; i < n; ++i) {
+            debug(E[i].x, E[i].y);
+        }
+
+        for(int i = 1; i < n && suc; ++i) {
+            if( (E[i].x < E[i-1].x) || (E[i].y < E[i-1].y) ) {
+                suc = false;
+            }
+
+            for(int j = 0; j < E[i].x - E[i-1].x; ++j) {
+                ans.push_back('R');
+            }
+            for(int j = 0; j < E[i].y - E[i-1].y; ++j) {
+                ans.push_back('U');
+            }            
+        }
+
+        if(suc == false) {
+            printf("NO\n");
+        } else {
+            printf("YES\n");
+            for(int i = 0, len = ans.size(); i < len; ++i) {
+                printf("%c", ans[i]);
+            } 
+            printf("\n");
+        }
+
+    }
+    return 0;
+}

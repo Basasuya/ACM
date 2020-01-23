@@ -1,25 +1,25 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <set>
-#include <map>
-#include <bitset>
 #include <algorithm>
-#include <iomanip>
-#include <cmath>
-#include <ctime>
-#include <functional>
-#include <unordered_set>
-#include <unordered_map>
-#include <queue>
-#include <deque>
-#include <stack>
-#include <complex>
+#include <bitset>
 #include <cassert>
-#include <random>
+#include <cmath>
+#include <complex>
 #include <cstring>
+#include <ctime>
+#include <deque>
+#include <fstream>
+#include <functional>
+#include <iomanip>
+#include <iostream>
+#include <map>
 #include <numeric>
-#define mp make_pair
+#include <queue>
+#include <random>
+#include <set>
+#include <stack>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+#define MP make_pair
 #define ll long long
 #define ld long double
 #define null NULL
@@ -49,12 +49,14 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #endif
 
 
-const int MAXN = 2e5 + 5;
+const int MAXN = 4e5 + 5;
 int tree[MAXN];
+int has[MAXN];
+
 int treesize;
 int Sum(int x) {
-    if(x <= 0) return 0;
     if(x > treesize) x = treesize;
+    if(x <= 0) return 0;
     int ans = 0;
     while(x > 0) {
         ans += tree[x];
@@ -62,11 +64,39 @@ int Sum(int x) {
     }
     return ans;
 }
+
 void Add(int x, int d) {
-    // debug(x);
     while(x <= treesize) {
         tree[x] += d;
         x += x & -x;
     }
 }
 
+
+int main() {
+    int q, x;
+    while(~scanf("%d %d", &q, &x)) {
+        for(int i = 0; i <= q; ++i) tree[i] = 0;
+        for(int i = 1; i <= q; ++i) has[i] = 0;
+
+        treesize = q;
+        for(int i = 0; i < q; ++i) {
+            int tt; scanf("%d", &tt);
+            tt = (tt % x) + 1;
+            // debug(tt);
+
+            if(1ll * has[tt] * x + tt <= q) Add(1ll * has[tt] * x + tt, 1);
+            
+            int l = 0; int r = q;
+            while(l <= r) {
+                int mid = (l + r) >> 1;
+                if(Sum(mid) != mid) r = mid - 1; 
+                else l = mid + 1;
+            }
+
+            printf("%d\n", r);
+            has[tt] ++;
+        }
+    }
+    return 0;
+}
