@@ -48,3 +48,47 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #else
 #define debug(...) 42
 #endif
+
+const int MOD = 1e9 + 7;
+
+int dp[2][1005];
+// int preSum[1005];
+
+int main() {
+    int n, m;
+    while(~scanf("%d %d", &n, &m)) {
+        if(m == 1) {
+            printf("%lld\n", 1ll * n * (n + 1) / 2);
+            continue;
+        }
+
+        // memset(dp, -1, sizeof(dp));
+        int fl = 0;
+        for(int i = 0; i < m; ++i) {
+            if(i == 0) {
+                for(int j = 1; j <= n; ++j) {
+                    dp[fl ^ 1][j] = 1;
+                }
+                fl ^= 1;
+            } else {
+                for(int j = 0; j <= n; ++j) {
+                    dp[fl ^ 1][j] = 0;
+                }
+                for(int j = 1; j <= n; ++j) {
+                    dp[fl ^ 1][j] = (dp[fl ^ 1][j - 1] + dp[fl][j]) % MOD;
+                }
+                fl ^= 1;
+            }
+        }
+
+        ll ans = 0;
+        for(int i = 1; i <= n; ++i) {
+            for(int j = i; j <= n; ++j) {
+                ans = (ans + 1ll * dp[fl][i] * dp[fl][n - j + 1] % MOD) % MOD;
+            }
+        }
+
+        printf("%lld\n", ans);
+    }
+    return 0;
+}

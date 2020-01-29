@@ -48,3 +48,20 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #else
 #define debug(...) 42
 #endif
+
+int main() {
+    int T;
+    scanf("%d", &T);
+    while(T --) {
+        int a, b;
+        scanf("%d %d", &a, &b);
+        ll tmp = 9;
+        int cnt = 0;
+        while(tmp <= b) {
+            cnt ++;
+            tmp = tmp * 10 + 9;
+        }
+        printf("%lld\n", 1ll * cnt * a);
+    }
+    return 0;
+}

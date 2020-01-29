@@ -48,3 +48,23 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #else
 #define debug(...) 42
 #endif
+
+
+int main() {
+    int T;
+    scanf("%d", &T);
+    while(T --) {
+        int n, d;
+        scanf("%d %d", &n, &d);
+        int tt = sqrt(d);
+        int ans = d;
+        for(int i = tt - 5; i <= tt + 5; ++i) {
+            if(i <= 0) continue;
+            int tmp = i + ceil(d * 1.0 / (i + 1));
+            ans = min(ans, tmp);
+        }
+        debug(ans);
+        printf("%s\n", ans <= n ? "YES" : "NO");
+    }
+    return 0;
+}
