@@ -47,10 +47,23 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-int gcd(int x, int y) {
+ll gcd(ll x, ll y) {
     if(y == 0) return x;
     else return gcd(y, x % y);
 }
+
+ll eular(ll n) {
+    ll ans = n;
+    for(ll i = 2; i * i <= n; ++i) {
+        if(n % i == 0) {
+            ans -= ans / i;
+            while(n % i == 0) n /= i;
+        }
+    }
+    if(n > 1) ans -= ans / n;
+    return ans;
+}
+
 int main() {
     int T;
     scanf("%d", &T);

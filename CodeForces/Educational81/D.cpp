@@ -1,25 +1,25 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <set>
-#include <map>
-#include <bitset>
 #include <algorithm>
-#include <iomanip>
-#include <cmath>
-#include <ctime>
-#include <functional>
-#include <unordered_set>
-#include <unordered_map>
-#include <queue>
-#include <deque>
-#include <stack>
-#include <complex>
+#include <bitset>
 #include <cassert>
-#include <random>
+#include <cmath>
+#include <complex>
 #include <cstring>
+#include <ctime>
+#include <deque>
+#include <fstream>
+#include <functional>
+#include <iomanip>
+#include <iostream>
+#include <map>
 #include <numeric>
-#define mp make_pair
+#include <queue>
+#include <random>
+#include <set>
+#include <stack>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+#define MP make_pair
 #define ll long long
 #define ld long double
 #define null NULL
@@ -32,6 +32,7 @@
 template<class T> int gmax(T &a, T b) { if (b > a) { a = b; return 1; } return 0; }
 template<class T> int gmin(T &a, T b) { if (b < a) { a = b; return 1; } return 0; }
 using namespace std;
+const int INF = 0x3f3f3f3f;
 string to_string(string s) { return '"' + s + '"'; }
 string to_string(const char* s) { return to_string((string) s); }
 string to_string(bool b) { return (b ? "true" : "false"); }
@@ -47,45 +48,50 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #else
 #define debug(...) 42
 #endif
-const int MOD = 998244353;
 
-ll Pow(ll x, ll y) {
-    ll ans = 1;
-    while(y) {
-        if(y & 1) ans = 1ll * ans * x % MOD;
-        x = 1ll * x * x % MOD;
-        y >>= 1;
-    }
-    return ans;
+const int N = 1e5 + 5;
+int isPrime[N]; 
+int Prime[N];
+int primeTot;
+
+ll gcd(ll x, ll y) {
+    if(y == 0) return x;
+    else return gcd(y, x % y);
 }
 
-
+ll eular(ll n) {
+    ll ans = n;
+    for(ll i = 2; i * i <= n; ++i) {
+        if(n % i == 0) {
+            ans -= ans / i;
+            while(n % i == 0) n /= i;
+        }
+    }
+    if(n > 1) ans -= ans / n;
+    return ans;
+}
 int main() {
-    int n;
-    while(~scanf("%d", &n)) {
-        map<int, int> mp;
-        vector<vector<int> > vc;
-        for(int i = 0; i < n; ++i) {
-            int t; scanf("%d", &t);
-            vector<int> tmp;
-            for(int j = 0; j < t; ++j) {
-                tmp.push_back(t);
-                mp[t] ++;
-            }
-            vc.push_back(tmp);
-        }
-
-        ll ans = 0;
-        ll reciprocalN = Pow(n, MOD - 2);
-        for(int i = 0; i < n; ++i) {
-            ll reciprocalItem = Pow(vc[i].size(), MOD - 2);
-            ll tt = reciprocalItem * reciprocalN % MOD * reciprocalN % MOD;
-            for(auto item : vc[i]) {
-                ans = (ans + tt * mp[tt] % MOD) % MOD;
-            }
-        }
-
-        printf("%lld\n", ans);
+    int T;
+    scanf("%d", &T);
+    while(T --) {
+        ll a, m;
+        scanf("%lld %lld", &a, &m);
+        ll am = gcd(a, m);
+        ll z = m / am;
+        ll y = a / am;
+        printf("%lld\n", eular(z));
     }
     return 0;
 }
+
+
+/*
+
+
+3
+4 9
+5 10
+42 9999999967
+
+
+*/

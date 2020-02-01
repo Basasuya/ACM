@@ -19,7 +19,6 @@
 #include <random>
 #include <cstring>
 #include <numeric>
-#define mp make_pair
 #define ll long long
 #define ld long double
 #define null NULL
@@ -47,45 +46,16 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #else
 #define debug(...) 42
 #endif
-const int MOD = 998244353;
-
-ll Pow(ll x, ll y) {
-    ll ans = 1;
-    while(y) {
-        if(y & 1) ans = 1ll * ans * x % MOD;
-        x = 1ll * x * x % MOD;
-        y >>= 1;
-    }
-    return ans;
-}
-
 
 int main() {
-    int n;
-    while(~scanf("%d", &n)) {
-        map<int, int> mp;
-        vector<vector<int> > vc;
-        for(int i = 0; i < n; ++i) {
-            int t; scanf("%d", &t);
-            vector<int> tmp;
-            for(int j = 0; j < t; ++j) {
-                tmp.push_back(t);
-                mp[t] ++;
-            }
-            vc.push_back(tmp);
-        }
-
-        ll ans = 0;
-        ll reciprocalN = Pow(n, MOD - 2);
-        for(int i = 0; i < n; ++i) {
-            ll reciprocalItem = Pow(vc[i].size(), MOD - 2);
-            ll tt = reciprocalItem * reciprocalN % MOD * reciprocalN % MOD;
-            for(auto item : vc[i]) {
-                ans = (ans + tt * mp[tt] % MOD) % MOD;
-            }
-        }
-
-        printf("%lld\n", ans);
+    int T;
+    scanf("%d", &T);
+    while(T --) {
+        int color[3];
+        scanf("%d %d %d", &color[0], &color[1], &color[2]);
+        sort(color, color + 3);
+        if(color[0] + color[1] < color[2] - 1) printf("NO\n");
+        else printf("YES\n");
     }
     return 0;
 }

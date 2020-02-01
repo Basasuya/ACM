@@ -1,25 +1,25 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <set>
-#include <map>
-#include <bitset>
 #include <algorithm>
-#include <iomanip>
-#include <cmath>
-#include <ctime>
-#include <functional>
-#include <unordered_set>
-#include <unordered_map>
-#include <queue>
-#include <deque>
-#include <stack>
-#include <complex>
+#include <bitset>
 #include <cassert>
-#include <random>
+#include <cmath>
+#include <complex>
 #include <cstring>
+#include <ctime>
+#include <deque>
+#include <fstream>
+#include <functional>
+#include <iomanip>
+#include <iostream>
+#include <map>
 #include <numeric>
-#define mp make_pair
+#include <queue>
+#include <random>
+#include <set>
+#include <stack>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+#define MP make_pair
 #define ll long long
 #define ld long double
 #define null NULL
@@ -32,6 +32,7 @@
 template<class T> int gmax(T &a, T b) { if (b > a) { a = b; return 1; } return 0; }
 template<class T> int gmin(T &a, T b) { if (b < a) { a = b; return 1; } return 0; }
 using namespace std;
+const int INF = 0x3f3f3f3f;
 string to_string(string s) { return '"' + s + '"'; }
 string to_string(const char* s) { return to_string((string) s); }
 string to_string(bool b) { return (b ? "true" : "false"); }
@@ -47,45 +48,51 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #else
 #define debug(...) 42
 #endif
-const int MOD = 998244353;
 
-ll Pow(ll x, ll y) {
-    ll ans = 1;
-    while(y) {
-        if(y & 1) ans = 1ll * ans * x % MOD;
-        x = 1ll * x * x % MOD;
-        y >>= 1;
-    }
-    return ans;
-}
-
+const int MAXN = 1e5 + 5;
+char seq[MAXN];
 
 int main() {
-    int n;
-    while(~scanf("%d", &n)) {
-        map<int, int> mp;
-        vector<vector<int> > vc;
+    int T;
+    scanf("%d", &T);
+    while(T --) {
+        int sum = 0;
+        int n, s;
+        scanf("%d %d", &n, &s);
+        scanf("%s", seq);
+        
+        auto same = [](int a, int b) {
+            if(a >= 0 && b > 0) return true;
+            else if(a <= 0 && b < 0) return true;
+            else return false;
+        };
+
         for(int i = 0; i < n; ++i) {
-            int t; scanf("%d", &t);
-            vector<int> tmp;
-            for(int j = 0; j < t; ++j) {
-                tmp.push_back(t);
-                mp[t] ++;
-            }
-            vc.push_back(tmp);
+            if(seq[i] == '0') sum ++;
+            else sum --;
         }
 
-        ll ans = 0;
-        ll reciprocalN = Pow(n, MOD - 2);
+        bool inf = false;
+
+        int ans = 0;
+        int tmp = 0;
+        if(s == 0) ans ++;
         for(int i = 0; i < n; ++i) {
-            ll reciprocalItem = Pow(vc[i].size(), MOD - 2);
-            ll tt = reciprocalItem * reciprocalN % MOD * reciprocalN % MOD;
-            for(auto item : vc[i]) {
-                ans = (ans + tt * mp[tt] % MOD) % MOD;
+            if(seq[i] == '0') tmp ++;
+            else tmp --;
+            int x = s - tmp;
+            debug(x, sum);
+            if(sum == 0) {
+                if(x == 0) {
+                    inf = true;
+                    break;
+                }
+            } else if(same(x, sum) && int(abs(x)) % int(abs(sum)) == 0){
+                ans ++;
             }
         }
 
-        printf("%lld\n", ans);
+        if(inf == true) printf("-1\n");
+        else printf("%d\n", ans);
     }
-    return 0;
 }

@@ -69,11 +69,14 @@ int main() {
             int t; scanf("%d", &t);
             vector<int> tmp;
             for(int j = 0; j < t; ++j) {
-                tmp.push_back(t);
-                mp[t] ++;
+                int x; scanf("%d", &x);
+                tmp.push_back(x);
+                mp[x] ++;
             }
             vc.push_back(tmp);
         }
+
+        debug(mp);
 
         ll ans = 0;
         ll reciprocalN = Pow(n, MOD - 2);
@@ -81,7 +84,7 @@ int main() {
             ll reciprocalItem = Pow(vc[i].size(), MOD - 2);
             ll tt = reciprocalItem * reciprocalN % MOD * reciprocalN % MOD;
             for(auto item : vc[i]) {
-                ans = (ans + tt * mp[tt] % MOD) % MOD;
+                ans = (ans + tt * mp[item] % MOD) % MOD;
             }
         }
 

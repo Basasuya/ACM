@@ -19,7 +19,6 @@
 #include <random>
 #include <cstring>
 #include <numeric>
-#define mp make_pair
 #define ll long long
 #define ld long double
 #define null NULL
@@ -47,45 +46,41 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #else
 #define debug(...) 42
 #endif
-const int MOD = 998244353;
 
-ll Pow(ll x, ll y) {
-    ll ans = 1;
-    while(y) {
-        if(y & 1) ans = 1ll * ans * x % MOD;
-        x = 1ll * x * x % MOD;
-        y >>= 1;
-    }
-    return ans;
-}
-
-
+const int MAXN = 1e5 + 5;
+int A[MAXN];
+ll dp[MAXN][2];
 int main() {
-    int n;
-    while(~scanf("%d", &n)) {
-        map<int, int> mp;
-        vector<vector<int> > vc;
+    int T;
+    scanf("%d", &T);
+    while(T --) {
+        int n, s;
+        scanf("%d %d", &n, &s);
+        ll sum = 0;
         for(int i = 0; i < n; ++i) {
-            int t; scanf("%d", &t);
-            vector<int> tmp;
-            for(int j = 0; j < t; ++j) {
-                tmp.push_back(t);
-                mp[t] ++;
-            }
-            vc.push_back(tmp);
+            scanf("%d", &A[i]);
+            sum += A[i];
         }
 
-        ll ans = 0;
-        ll reciprocalN = Pow(n, MOD - 2);
+        if(sum <= s) {
+            printf("0\n");
+            continue;
+        }
+        
+        sum = 0;
+        bool done = false;
+        int maxx = -1; int pos = -1; 
         for(int i = 0; i < n; ++i) {
-            ll reciprocalItem = Pow(vc[i].size(), MOD - 2);
-            ll tt = reciprocalItem * reciprocalN % MOD * reciprocalN % MOD;
-            for(auto item : vc[i]) {
-                ans = (ans + tt * mp[tt] % MOD) % MOD;
+            sum += A[i];
+            if(maxx < A[i]) { maxx = A[i]; pos = i; }
+            if(sum > s && !done) {
+                sum -= maxx;
+                done = true;
+                break;
             }
         }
 
-        printf("%lld\n", ans);
+        printf("%d\n", pos + 1);
     }
     return 0;
 }
