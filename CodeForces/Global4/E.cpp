@@ -1,0 +1,113 @@
+#include <algorithm>
+#include <bitset>
+#include <cassert>
+#include <cmath>
+#include <complex>
+#include <cstring>
+#include <ctime>
+#include <deque>
+#include <fstream>
+#include <functional>
+#include <iomanip>
+#include <iostream>
+#include <map>
+#include <numeric>
+#include <queue>
+#include <random>
+#include <set>
+#include <stack>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+#define MP make_pair
+#define ll long long
+#define ld long double
+#define null NULL
+#define all(a) a.begin(), a.end()
+#define forn(i, n) for (int i = 0; i < n; ++i)
+#define sz(a) (int)a.size()
+#define lson l , m , rt << 1
+#define rson m + 1 , r , rt << 1 | 1
+#define bitCount(a)  __builtin_popcount(a)
+template<class T> int gmax(T &a, T b) { if (b > a) { a = b; return 1; } return 0; }
+template<class T> int gmin(T &a, T b) { if (b < a) { a = b; return 1; } return 0; }
+using namespace std;
+const int INF = 0x3f3f3f3f;
+string to_string(string s) { return '"' + s + '"'; }
+string to_string(const char* s) { return to_string((string) s); }
+string to_string(bool b) { return (b ? "true" : "false"); }
+template <typename A, typename B>
+string to_string(pair<A, B> p) { return "(" + to_string(p.first) + ", " + to_string(p.second) + ")"; }
+template <typename A>
+string to_string(A v) { bool first = true; string res = "{"; for (const auto &x : v) { if (!first) { res += ", "; } first = false; res += to_string(x); } res += "}"; return res; }
+void debug_out() { cerr << endl; }
+template <typename Head, typename... Tail>
+void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...); }
+#ifdef LOCAL
+#define debug(...) cerr << "[" << #__VA_ARGS__ << "]:", debug_out(__VA_ARGS__)
+#else
+#define debug(...) 42
+#endif
+
+
+const int MAXN = 1e6 + 5;
+char s[MAXN];
+int n;
+
+pair<int, string> solve(int l, int r) {
+    
+
+    string left; string right;
+
+    if(l + 1 < r) {
+        left += s[l + 1];  
+    }
+
+    // int l = n / 2;
+    // int r = n / 2;
+    // if(l == r) { l --; r ++; }
+
+    debug(l, r);
+    for(; r < n && l >= 0; r += 2, l-= 2) {
+        if(s[l] == s[r]) { 
+            left += s[l]; right += s[r];
+            if(l - 1 >= 0 && r + 1 < n && s[l - 1] == s[r + 1]) {
+                left += s[l - 1]; right += s[r + 1];
+            }
+        } else{
+            if(l - 1 >= 0 && r + 1 < n && s[l - 1] == s[r + 1]) {
+                left += s[l - 1]; right += s[r + 1];
+            } else if(r + 1 < n && s[l] == s[r + 1]) {
+                left += s[l]; right += s[r + 1];
+            } else if(l - 1 >= 0 && s[l - 1] == s[r]) {
+                left += s[l - 1]; right += s[r];
+            }
+        }
+    }
+
+    reverse(left.begin(), left.end());
+    string ans = left + right;
+    debug(ans.size(), n);
+
+    if( (int)ans.size() < n / 2) return {false, ans};
+    else return {true, ans};
+}
+int main() {
+    while(~scanf("%s", s)) {
+        n = strlen(s);
+        if(n == 2) {
+            printf("%c\n", s[0]);
+            continue;
+        }
+        
+        int center = n / 2;
+        auto tmp = solve(center - 1, center + 1);
+
+        if(tmp.first == true) printf("%s\n", tmp.second.c_str());
+        else if( (tmp = solve(center, center + 1)).first == true ) printf("%s\n", tmp.second.c_str());
+        else if( (tmp = solve(center - 1, center)).first == true ) printf("%s\n", tmp.second.c_str());
+        else printf("IMPOSSIBLE\n");
+
+    }
+    return 0;
+}
