@@ -47,3 +47,28 @@ void bfs(int x, int y) {
     }
     
 }
+
+
+
+// vector<int> vc[N];
+
+// vc[fr].push_back(to); // 加边
+
+// for(int i = 0; i < vc[x].size(); ++i) { //遍历x的领域
+//     int to = vc[x][i];
+// }
+
+// ///////
+
+// struct Node{
+//     int fr, to, nx, dis;
+// }E[N << 1];
+// int head[N]; int tot = 0; 
+// void add(int fr, int to) {
+//     E[tot].to = to; E[tot].nx = head[fr]; head[fr] = tot ++;
+// }
+// memset(head, -1, sizeof(head)); tot = 0;
+// add(fr, to); // 加边
+// for(int i = head[x]; ~i; i = E[i].nx) { //遍历x的领域
+//     int to = E[i].to;
+// }
