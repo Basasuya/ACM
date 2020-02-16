@@ -38,6 +38,14 @@ const int DEG = 20;
 int fa[N][DEG];
 int deg[N];
 
+struct Node{
+    int fr, to, nx, dis;
+}E[N << 1];
+int head[N]; int tot = 0; 
+void add(int fr, int to) {
+    E[tot].to = to; E[tot].nx = head[fr]; head[fr] = tot ++;
+}
+
 void bfs(int root) {  
 	queue<int>que;
 	deg[root] = 0;
