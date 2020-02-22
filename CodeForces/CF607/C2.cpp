@@ -1,25 +1,25 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <set>
-#include <map>
-#include <bitset>
 #include <algorithm>
-#include <iomanip>
-#include <cmath>
-#include <ctime>
-#include <functional>
-#include <unordered_set>
-#include <unordered_map>
-#include <queue>
-#include <deque>
-#include <stack>
-#include <complex>
+#include <bitset>
 #include <cassert>
-#include <random>
+#include <cmath>
+#include <complex>
 #include <cstring>
+#include <ctime>
+#include <deque>
+#include <fstream>
+#include <functional>
+#include <iomanip>
+#include <iostream>
+#include <map>
 #include <numeric>
-#define mp make_pair
+#include <queue>
+#include <random>
+#include <set>
+#include <stack>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+#define MP make_pair
 #define ll long long
 #define ld long double
 #define null NULL
@@ -32,6 +32,7 @@
 template<class T> int gmax(T &a, T b) { if (b > a) { a = b; return 1; } return 0; }
 template<class T> int gmin(T &a, T b) { if (b < a) { a = b; return 1; } return 0; }
 using namespace std;
+const int INF = 0x3f3f3f3f;
 string to_string(string s) { return '"' + s + '"'; }
 string to_string(const char* s) { return to_string((string) s); }
 string to_string(bool b) { return (b ? "true" : "false"); }
@@ -48,26 +49,41 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-const int INF = 0x3f3f3f3f;
-const int MAXN = 3e5 + 5;
+const ll mod=1000000007;
+const int MAXN=1000100;
+// const int INF=1<<30;
 
-int main() {
-    int n;
-    while(~scanf("%d", &n)) {
-        int x = n % 10;
-        int a, b;
-        if(x == 0) {
-            b = 100;
-            a = n + b;
-        } else if(x == 9) {
-            b = 21;
-            a = n + b;
-        } else {
-            b = (10 - x) * 10 + (10 - x);
-            a = n + b;
+int n,m;
+char s[MAXN];
+
+int main(){
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        scanf("%d",&m);
+        scanf("%s",s);
+        n=strlen(s);
+        ll ans=n;
+        for(int i=0;i<m;i++){
+            int num=s[i]-'0';
+            ll tem = (ans-i-1 + mod) % mod;
+            ans=i+1;
+            for(int j=0;j<num;j++){
+                ans=(ans+tem)%mod;
+            }
+            // cout<<ans<<endl;
+            int tem_n=n;
+            if(n<m){
+                for(int k=0;k<num-1;k++){
+                    if(n>=m)break;
+                    for(int j=i+1;j<tem_n;j++){
+                        if(n>=m)break;
+                        s[n++]=s[j];
+                    }
+                }
+            }
         }
-
-        printf("%d %d\n", a, b);
-    }
+        cout<<ans<<endl;
+    }   
     return 0;
 }

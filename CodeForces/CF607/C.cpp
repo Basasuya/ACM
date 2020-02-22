@@ -1,25 +1,25 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <set>
-#include <map>
-#include <bitset>
 #include <algorithm>
-#include <iomanip>
-#include <cmath>
-#include <ctime>
-#include <functional>
-#include <unordered_set>
-#include <unordered_map>
-#include <queue>
-#include <deque>
-#include <stack>
-#include <complex>
+#include <bitset>
 #include <cassert>
-#include <random>
+#include <cmath>
+#include <complex>
 #include <cstring>
+#include <ctime>
+#include <deque>
+#include <fstream>
+#include <functional>
+#include <iomanip>
+#include <iostream>
+#include <map>
 #include <numeric>
-#define mp make_pair
+#include <queue>
+#include <random>
+#include <set>
+#include <stack>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+#define MP make_pair
 #define ll long long
 #define ld long double
 #define null NULL
@@ -32,6 +32,7 @@
 template<class T> int gmax(T &a, T b) { if (b > a) { a = b; return 1; } return 0; }
 template<class T> int gmin(T &a, T b) { if (b < a) { a = b; return 1; } return 0; }
 using namespace std;
+const int INF = 0x3f3f3f3f;
 string to_string(string s) { return '"' + s + '"'; }
 string to_string(const char* s) { return to_string((string) s); }
 string to_string(bool b) { return (b ? "true" : "false"); }
@@ -48,26 +49,51 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-const int INF = 0x3f3f3f3f;
-const int MAXN = 3e5 + 5;
+char s[505];
+const int MOD = 1e9 + 7;
 
 int main() {
-    int n;
-    while(~scanf("%d", &n)) {
-        int x = n % 10;
-        int a, b;
-        if(x == 0) {
-            b = 100;
-            a = n + b;
-        } else if(x == 9) {
-            b = 21;
-            a = n + b;
-        } else {
-            b = (10 - x) * 10 + (10 - x);
-            a = n + b;
+    int T;
+    scanf("%d", &T);
+    while(T --) {
+        int x;
+        scanf("%d %s", &x, s);
+        
+        string now = s;
+        bool done = false;
+        ll ans = (int)now.length();
+
+        // debug(ans);
+        for(int target = 0; target < x; ++target) {
+            int i = min(target, (int)now.size() - 1);
+            int num = now[i] - '0';
+            
+            if(done == false) {
+                string add = now.substr(i + 1, (int)now.length() - i - 1);
+                for(int j = 0; j < num - 1; ++j) {
+                    now += add;
+                    if(now.length() >= x) {
+                        done = true;
+                        break;
+                    }
+                }
+            }
+
+            ans = (ans + (ans - i - 1 + MOD) * (num - 1) % MOD) % MOD;
+            // debug(ans, now, num);
         }
 
-        printf("%d %d\n", a, b);
+        printf("%lld\n", ans);
+
     }
     return 0;
 }
+
+// *
+// 2 3 1
+
+//   *
+// 2 3 1 3 1
+
+//     *
+// 2 3 1 3 1 1 3 1 1 3 1

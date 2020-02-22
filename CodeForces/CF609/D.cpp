@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <iomanip>
 #include <cmath>
+// #include <ext/pb_ds/assoc_container.hpp> 
+// #include <ext/pb_ds/tree_policy.hpp> 
 #include <ctime>
 #include <functional>
 #include <unordered_set>
@@ -50,24 +52,29 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 
 const int INF = 0x3f3f3f3f;
 const int MAXN = 3e5 + 5;
+int A[MAXN];
 
 int main() {
     int n;
     while(~scanf("%d", &n)) {
-        int x = n % 10;
-        int a, b;
-        if(x == 0) {
-            b = 100;
-            a = n + b;
-        } else if(x == 9) {
-            b = 21;
-            a = n + b;
-        } else {
-            b = (10 - x) * 10 + (10 - x);
-            a = n + b;
+        // memset(dp, 0, sizeof(dp));
+        // ll sum = 0;
+        ll odd = 0; ll even = 0;
+        for(int i = 0; i < n; ++i) {
+            scanf("%d", &A[i]);
+            if(i % 2 == 0) {
+                odd += (A[i] + 1) / 2;
+                even += A[i] / 2;
+            } else {
+                even += (A[i] + 1) / 2;
+                odd += A[i] / 2;
+            }
         }
 
-        printf("%d %d\n", a, b);
+        
+
+        printf("%lld\n",min(odd, even));
+
     }
     return 0;
 }

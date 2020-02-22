@@ -48,26 +48,25 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-const int INF = 0x3f3f3f3f;
-const int MAXN = 3e5 + 5;
-
+const int MAXN = 1e3 + 5;
+char seq[MAXN];
 int main() {
-    int n;
-    while(~scanf("%d", &n)) {
-        int x = n % 10;
-        int a, b;
-        if(x == 0) {
-            b = 100;
-            a = n + b;
-        } else if(x == 9) {
-            b = 21;
-            a = n + b;
-        } else {
-            b = (10 - x) * 10 + (10 - x);
-            a = n + b;
-        }
+    int T;
+    scanf("%d", &T);
 
-        printf("%d %d\n", a, b);
+    string Filipino = "po";
+    string Japanese1 = "desu";
+    string Japanese2 = "masu";
+    string Korean = "mnida";
+
+    while(T --) {
+        scanf("%s", seq);
+
+        string tt = string(seq);
+
+        if(tt[tt.length() - 1] == 'o') printf("FILIPINO\n");
+        else if(tt[tt.length() - 1] == 'u') printf("JAPANESE\n");
+        else  printf("KOREAN\n");
     }
     return 0;
 }
