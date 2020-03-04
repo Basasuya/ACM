@@ -93,3 +93,40 @@ int main()
         for(int i=0;i<Y.size();i++) printf("%d ",Y[i]);puts("");
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+bool dfs(int x) {
+    for(int i = head[x]; ~i; i = E[i].nx) {
+        int to = E[i].to;
+        if(!vis[to]) {
+            vis[to] = true;
+            if(linker[to] == -1 || dfs(linker[to])) {
+                linker[to] = x;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+
+int hungary() {
+    int res = 0;
+    memset(linker, -1, sizeof(linker));
+
+    for(int i = 0; i < n; ++i) {
+        memset(vis, 0, sizeof(vis));
+        if(dfs(i)) res ++;
+    }
+    return res;
+}

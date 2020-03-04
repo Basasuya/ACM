@@ -29,32 +29,59 @@ int head[N]; int tot = 0;
 void add(int fr, int to) {
     E[tot].to = to; E[tot].nx = head[fr]; head[fr] = tot ++;
 }
+
 struct Hode{
-  int po, di;
-  Hode(int a=0, int b=0):po(a), di(b){}
-  bool operator < (const Hode & T) const {
-    return di > T.di;
-  }
+    int po, di;
+    Hode(int a=0, int b=0):po(a), di(b){}
+    bool operator < (const Hode & T) const {
+        return di > T.di;
+    }
 };
 
 int dis[N], vis[N];
-void dij1(int s, int t) {
-  priority_queue<Hode> Q;
-  memset(dis, INF, sizeof(dis));
-  dis[s] = 0; 
-  memset(vis, 0, sizeof(vis));
-  Q.push(Hode(s, dis[s]));
+void dij1(int s, int n) {
+    priority_queue<Hode> Q;
+    memset(dis, INF, sizeof(dis));
+    dis[s] = 0; 
+    memset(vis, 0, sizeof(vis));
+    Q.push(Hode(s, dis[s]));
 
-  while(!Q.empty()) {
-    int po = Q.top().po; Q.pop();
-    if(vis[po]) continue;
-    vis[po] =  1;
-    for(int i = head[po]; ~i; i = E[i].nx) {
-      int to = E[i].to;
-      if(dis[to] > dis[po] + E[i].dis) {
-        dis[to] = dis[po] + E[i].dis;
-        Q.push(Hode(to, dis[to]));
-      }
+    while(!Q.empty()) {
+        int po = Q.top().po; Q.pop();
+        if(vis[po]) continue;
+        vis[po] =  1;
+        for(int i = head[po]; ~i; i = E[i].nx) {
+            int to = E[i].to;
+            if(dis[to] > dis[po] + E[i].dis) {
+                dis[to] = dis[po] + E[i].dis;
+                Q.push(Hode(to, dis[to]));
+            }
+        }
     }
-  }
+}
+
+int cnt[N];
+void SPFA(int s, int n) {
+	memset(vis, 0, siezof(vis));
+	for(int i = 0; i <= n; ++i) dis[i] = INF;
+	vis[s] = true;
+	dis[s] = 0;
+	cnt[s] = 1;
+	queue<int> Q;
+	while(!Q.empty()) {
+		int x = Q.front(); Q.pop();
+		vis[x] = false;
+		for(int i = head[x]; ~i; i = E[i].nx) {
+			int to = E[i].to;
+			if(dis[to] > dis[x] + E[i].dis) {
+				dis[to] = dis[x] + E[i].dis;
+				if(!vis[to]) {
+					vis[to] = true;
+					Q.push(to);
+					if(++cnt[to] > n) return false;
+				}
+			}
+		}
+	}
+	return true;
 }
