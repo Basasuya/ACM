@@ -19,6 +19,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+using namespace std;
 #define MP make_pair
 #define ll long long
 #define ld long double
@@ -31,7 +32,7 @@
 #define bitCount(a)  __builtin_popcount(a)
 template<class T> int gmax(T &a, T b) { if (b > a) { a = b; return 1; } return 0; }
 template<class T> int gmin(T &a, T b) { if (b < a) { a = b; return 1; } return 0; }
-using namespace std;
+
 const int INF = 0x3f3f3f3f;
 string to_string(string s) { return '"' + s + '"'; }
 string to_string(const char* s) { return to_string((string) s); }
@@ -49,5 +50,22 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-std::ios::sync_with_stdio(false);
-std::cin.tie(0);
+
+int main() {
+    freopen("in.txt", "w", stdout);
+    
+    int T = 100;
+    printf("%d\n", T);
+    for(int i = 0; i < T; ++i) {
+        int n = 10000;
+        int K = 20;
+        printf("%d %d\n", n, K);
+        for(int j = 0; j < n; ++j) {
+            string tmp;
+            for(int k = 0; k < 5; ++k) {
+                tmp += random() % 26 + 'A';
+            }
+            printf("%s\n", tmp.c_str());
+        }
+    }
+}

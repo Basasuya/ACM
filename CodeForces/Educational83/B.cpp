@@ -49,5 +49,29 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-std::ios::sync_with_stdio(false);
-std::cin.tie(0);
+const int MAXN = 105;
+
+int A[MAXN];
+
+bool cmp(int x, int y) {
+    return x > y;
+}
+
+int main() {
+    int T;
+    scanf("%d", &T);
+    while(T --) {
+        int n;
+        scanf("%d", &n);
+        
+        for(int i = 0; i < n; ++i) {
+            scanf("%d", &A[i]);
+        }
+
+        sort(A, A + n, cmp);
+
+        for(int i = 0; i < n; ++i) printf("%d ", A[i]); printf("\n");
+        
+    }
+    return 0;
+}

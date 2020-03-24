@@ -49,5 +49,69 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-std::ios::sync_with_stdio(false);
-std::cin.tie(0);
+const int MAXN = 1e5 + 5;
+
+int A[MAXN];
+int S[MAXN][10];
+int ord[MAXN];
+
+bool cmp(int x, int y) {
+    return A[x] > A[y];
+}
+
+ll dp[2][200];
+
+int main() {
+    int n, p, k;
+    while(~scanf("%d %d %d", &n, &p, &k)) {
+
+        for(int i = 0; i < n; ++i) ord[i] = i;
+        for(int i = 0; i < n; ++i) scanf("%d", &A[i]);
+
+        for(int i = 0; i < n; ++i) {
+            for(int j = 0; j < p; ++j)
+                scanf("%d", &S[i][j]);
+        }
+
+        sort(ord, ord + n, cmp);
+        int fl = 1;
+        for(int i = 0; i < (1<<p); ++i) {
+            dp[0][i] = dp[1][i] = -INF;
+        }
+
+        dp[fl ^ 1][0] = 0;
+
+        for(int i = 1; i <= n; ++i) {
+            int target = ord[i-1];
+            for(int j = 0; j < (1<<p); ++j) {
+                int bit_count = 0;
+                for(int k = 0; k < p; ++k) {
+                    if( (j >> k) & 1 )
+                        bit_count ++;
+                }
+                if(bit_count > i) continue;
+
+                for(int k = 0; k < p; ++k) {
+                    if( (j >> k) & 1 ) {
+                        int pre = j ^ (1<<k);
+                        dp[fl][j] = max(dp[fl][j], dp[fl ^ 1][pre] + S[target][k]);
+                    }
+                }
+                
+                if(i - bit_count <= k) dp[fl][j] = max(dp[fl][j], dp[fl ^ 1][j] + A[target]);
+                else dp[fl][j] = max(dp[fl][j], dp[fl ^ 1][j]);
+            }
+
+            // for(int j = 0; j < (1<<p); ++j) printf("%d ", dp[fl][j]); printf("\n");
+            
+            fl ^= 1;
+            for(int j = 0; j < (1<<p); ++j) {
+                dp[fl][j] = -INF;
+            }
+
+        }
+
+        printf("%lld\n", dp[fl ^ 1][(1<<p) - 1]);
+    }
+    return 0;
+}

@@ -86,15 +86,6 @@ vector<int> HeapSort(vector<int> &vc) {
         updateDown(ans, i, n - 1);
     }
 
-    // ans.push_back(10);
-    // updateUp(ans, ans.size() - 1, ans.size());
-    // debug(ans);
-
-    // ans.push_back(8);
-    // updateUp(ans, ans.size() - 1, ans.size());
-    // debug(ans);
-    // return ans;
-
     for(int i = n - 1; i > 0; --i) {
         swap(ans[0], ans[i]);
         updateDown(ans, 0, i - 1);

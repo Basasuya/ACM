@@ -49,5 +49,28 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-std::ios::sync_with_stdio(false);
-std::cin.tie(0);
+const int MOD = 1e9 + 7;
+
+ll Pow(ll x, ll y) {
+    ll ans = 1;
+    while(y) {
+        if(y & 1) ans = 1ll * ans * x % MOD;
+        x = 1ll * x * x % MOD;
+        y >>= 1;
+    }
+    return ans;
+}
+
+int main() {
+    int n;
+    while(~scanf("%d", &n)) {
+        if(n == 1) printf("1\n");
+        else {
+            ll tt = Pow(2, n - 1);
+            tt = (tt - 1 + MOD) % MOD;
+            ll ans = tt * n % MOD + n;
+            printf("%lld\n", ans);
+        }
+    }
+    return 0;
+}

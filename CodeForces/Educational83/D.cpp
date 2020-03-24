@@ -49,5 +49,53 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-std::ios::sync_with_stdio(false);
-std::cin.tie(0);
+const int MOD = 998244353;
+const int MAXN = 2e5 + 5;
+
+ll Mul[MAXN];
+ll Two[MAXN];
+ll Pow(ll x, ll y) {
+    ll ans = 1;
+    while(y) {
+        if(y & 1) ans = 1ll * ans * x % MOD;
+        x = 1ll * x * x % MOD;
+        y >>= 1;
+    }
+    return ans;
+}
+
+ll C(int x, int y) {
+    if(y == 0) return 1;
+    return 1ll* Mul[x] * Pow(1ll * Mul[y] * Mul[x - y] % MOD, MOD - 2) % MOD;
+}
+
+
+int main() {
+
+    Mul[0] = Mul[1] = 1;
+    Two[0] = 1;
+    Two[1] = 2;
+    for(int i = 2; i < MAXN; ++i) {
+        Mul[i] = 1ll * Mul[i - 1] * i % MOD;
+        Two[i] = 1ll * Two[i - 1] * 2 % MOD;
+    }
+
+    int n, m;
+    while(~scanf("%d %d", &n, &m)) {
+        
+        if(n == 2) {
+            printf("0\n");
+            continue;
+        }
+
+        ll ans = 0;
+        for(int i = m; i >= 1; --i) {
+            if(i - 1 >= n - 2) ans = (ans + 1ll * C(i - 1, n - 2) * (n - 2) % MOD * Two[n - 3] % MOD ) % MOD;
+            else break;
+        }
+
+
+        printf("%lld\n", ans);
+    }
+    return 0;
+}

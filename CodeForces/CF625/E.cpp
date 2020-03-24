@@ -49,5 +49,23 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-std::ios::sync_with_stdio(false);
-std::cin.tie(0);
+const int MAXN = 2e5 + 5;
+int A[MAXN], CA[MAXN];
+int B[MAXN], CB[MAXN];
+
+int main() {
+    int n, m, p;
+    while(~scanf("%d %d %d", &n, &m, &p)) {
+        for(int i = 0; i < n; ++i) {
+            scanf("%d %d", &A[i], &CA[i]);
+        }
+        
+        for(int i = 0; i < m; ++i) {
+            scanf("%d %d", &B[i], &CB[i]);
+        }
+
+        for()
+
+    }
+    return 0;
+}

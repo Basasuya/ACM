@@ -49,5 +49,44 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-std::ios::sync_with_stdio(false);
-std::cin.tie(0);
+ll A[50];
+
+int main() {
+    int T;
+    scanf("%d", &T);
+    while(T --) {
+        int n, k;
+        scanf("%d %d", &n, &k);
+
+        for(int i = 0; i < n; ++i) {
+            scanf("%lld", &A[i]);
+        }
+
+        map<int, int> mp;
+        
+        for(int i = 0; i < n; ++i) {
+            ll tmp = A[i];
+            int bit_count = 0;
+            while(tmp) {
+                if(tmp % k > 0) {
+                    mp[bit_count] += tmp % k;
+                }
+                bit_count ++;
+                tmp /= k;
+            }
+        }
+
+        bool suc = true;
+        for(auto it : mp) {
+            if(it.second != 1) {
+                suc = false;
+                break;
+            }
+        }
+
+        if(suc == true) printf("YES\n");
+        else printf("NO\n");
+
+    }
+    return 0;
+}

@@ -49,5 +49,45 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-std::ios::sync_with_stdio(false);
-std::cin.tie(0);
+
+int dp[2][1505];
+int vc[55][35];
+
+int main() {
+    int T;
+    scanf("%d", &T);
+    for(int cas = 1; cas <= T; ++cas) {
+        int n, K, P;
+        scanf("%d %d %d", &n, &K, &P);
+        // vector<vector<int>> vc(n, vector<int>());
+
+        for(int i = 0; i < n; ++i) {
+            for(int j = 1; j <= K; ++j) {
+                int x; scanf("%d", &x);
+                vc[i][j] = x;
+            } 
+
+            for(int j = 2; j <= K; ++j) {
+                vc[i][j] += vc[i][j-1];
+            }           
+        }
+
+        int fl = 0;
+        memset(dp, -1, sizeof(dp));
+        dp[fl][0] = 0;
+        for(int i = 0; i < n; ++i) {
+            for(int l = 0; l <= P; ++l) {
+                dp[fl ^ 1][l] = dp[fl][l];
+                for(int j = 1; j <= K; ++j) {
+                    if(l - j < 0) break;
+                    if(dp[fl][l - j] != -1) dp[fl ^ 1][l] = max(dp[fl ^ 1][l], dp[fl][l - j] + vc[i][j]);
+                }
+            }
+            fl ^= 1;
+        }
+
+        printf("Case #%d: ", cas);
+        printf("%d\n", dp[fl][P]);
+    }
+    return 0;
+}
