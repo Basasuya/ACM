@@ -117,7 +117,6 @@ int main() {
 
             // debug(tmp_ans);
         }
-
         printf("Case #%d: %lld\n", cas, ans);
     }
 }
