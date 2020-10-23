@@ -48,3 +48,64 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #else
 #define debug(...) 42
 #endif
+
+const int MAXN = 2e3 + 5;
+char seq[MAXN];
+const int MOD = 1e9;
+
+int main() {
+    int T;
+    scanf("%d", &T);
+    for(int cas = 1; cas <= T; ++cas) {
+        scanf("%s", seq);
+        int len = strlen(seq);
+
+        ll X = 0; ll Y = 0;
+
+        vector<pair<ll, ll> > st;
+        for(int i = 0; i < len; ++i) {
+            if(seq[i] == ')') {
+                ll x_tmp = 0; ll y_tmp = 0;
+                while(!st.empty()) {
+                    auto tmp = st.back(); st.pop_back();
+                    if(tmp.first == INF) {
+                        x_tmp = x_tmp * tmp.second % MOD;
+                        y_tmp = y_tmp * tmp.second % MOD;
+                        break;
+                    }
+
+                    x_tmp = (x_tmp + tmp.first + MOD) % MOD;
+                    y_tmp = (y_tmp + tmp.second + MOD) % MOD;
+                }
+
+                st.push_back({x_tmp, y_tmp});
+            } else {
+                if(seq[i] == 'N') {
+                    st.push_back({0, 999999999});
+                } else if(seq[i] == 'S') {
+                    st.push_back({0, 1});
+                } else if(seq[i] == 'W') {
+                    st.push_back({999999999, 0});
+                } else if(seq[i] == 'E') {
+                    st.push_back({1, 0});
+                } else if(seq[i] >= '2' && seq[i] <= '9'){
+                    st.push_back({INF, seq[i] - '0'});
+                }
+            }
+        }
+
+        {
+            ll x_tmp = 0; ll y_tmp = 0;
+            while(!st.empty()) {
+                auto tmp = st.back(); st.pop_back();
+                assert(tmp.first != INF);
+                x_tmp = (x_tmp + tmp.first + MOD) % MOD;
+                y_tmp = (y_tmp + tmp.second + MOD) % MOD;
+            }
+            st.push_back({x_tmp, y_tmp});
+        }
+
+        printf("Case #%d: %lld %lld\n", cas, st.back().first + 1, st.back().second + 1);
+    }
+    return 0;
+}
