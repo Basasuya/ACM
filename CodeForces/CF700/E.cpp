@@ -49,55 +49,51 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-const int MAXN = 1e5 + 5;
-
-int history[MAXN];
-
-int ask_and_read(int y) {
-    if(history[y] != -1)
-        return history[y];
-
-    printf("? %d\n", y);
-    fflush(stdout);
-    int x;
-    scanf("%d", &x);
-    history[y] = x;
-
-    return x;
-}
-
-int main() {
-    memset(history, -1, sizeof(history));
-
-    int n;
-    scanf("%d", &n);
-    if(n == 1) {
-        printf("! 1\n");
-        fflush(stdout);
-        return 0;
-    }
-
-    if(n == 2) {
-        if(ask_and_read(1) == 1) printf("! 1\n");
-        else printf("! 2\n");
-        fflush(stdout);
-        return 0;
-    }
-
-    int l = 1; int r = n;
-
-    while(l != r) {
-        int mid = (l + r) / 2;
-        int mid_val = ask_and_read(mid);
-        int mid_plus_val = ask_and_read(mid + 1);
-
-        if(mid_val < mid_plus_val) {
-            r = mid;
-        } else {
-            l = mid + 1;
+const int N = 1e5+5;
+int dis[32][32];
+void solve()
+{
+    int L, R;
+    scanf("%d%d", &L, &R);
+    puts("YES");
+    int n = 22, m = 0;
+    for (int i = 1; i < n; ++i) {
+        int t = L;
+        if (i >= 2) t = 1 << i-2;
+        //cout << i << ' ' << t << '#';
+        for (int j = i+1; j < n; ++j) {
+            dis[i][j] = t;
         }
     }
+    dis[1][n] = L;
+    int a = 2, b = R-L, tmp = 1;
+    while (b) {
+        if (b&1) dis[a][n] += tmp, tmp += 1<<a-2;
+        ++a;
+        b >>= 1;
+    }
+    for (int i = 1; i <= n; ++i) {
+        for (int j = i+1; j <= n; ++j) {
+            m += dis[i][j]!=0;
+        }
+    }
+    printf("%d %d\n", n, m);
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j < i; ++j) {
+            if (dis[j][i]) {
+                printf("%d %d %d\n", j, i, dis[j][i]);
+            }
+        }
+    }
+}
 
-    printf("! %d\n", l);
-    fflush(stdout);
+int main()
+{
+    // ios::sync_with_stdio(0); cin.tie(0);
+    int t = 1;
+    // scanf("%d", &t);
+    while (t--) {
+        solve();
+    }
+    return 0;
 }

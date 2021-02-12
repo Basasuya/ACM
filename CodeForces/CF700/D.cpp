@@ -50,54 +50,55 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #endif
 
 const int MAXN = 1e5 + 5;
-
-int history[MAXN];
-
-int ask_and_read(int y) {
-    if(history[y] != -1)
-        return history[y];
-
-    printf("? %d\n", y);
-    fflush(stdout);
-    int x;
-    scanf("%d", &x);
-    history[y] = x;
-
-    return x;
-}
+int A[MAXN];
+int now[MAXN];
+int nex[MAXN];
 
 int main() {
-    memset(history, -1, sizeof(history));
-
     int n;
-    scanf("%d", &n);
-    if(n == 1) {
-        printf("! 1\n");
-        fflush(stdout);
-        return 0;
-    }
-
-    if(n == 2) {
-        if(ask_and_read(1) == 1) printf("! 1\n");
-        else printf("! 2\n");
-        fflush(stdout);
-        return 0;
-    }
-
-    int l = 1; int r = n;
-
-    while(l != r) {
-        int mid = (l + r) / 2;
-        int mid_val = ask_and_read(mid);
-        int mid_plus_val = ask_and_read(mid + 1);
-
-        if(mid_val < mid_plus_val) {
-            r = mid;
-        } else {
-            l = mid + 1;
+    while(~scanf("%d", &n)) {
+        for(int i = 0; i <= n; ++i) {
+            now[i] = n + 1;
+            nex[i] = n + 1;
         }
-    }
 
-    printf("! %d\n", l);
-    fflush(stdout);
+        for(int i = 0; i < n; ++i) {
+            scanf("%d", &A[i]);
+            
+        }
+
+        for(int i = n - 1; i >= 0; --i) {
+            nex[i] = now[A[i]];
+            now[A[i]] = i;
+        }
+
+        // for(int i = 0; i < n; ++i) printf("%d ", nex[i]); printf("\n");
+
+        int pre_L = n; int pre_R = n;
+        A[n] = -1;
+        int ans = 0;
+
+        for(int i = 0; i < n; ++i) {
+            if(A[pre_L] != A[i] && A[pre_R] != A[i]) {
+                ans ++;
+                if(nex[pre_L] > nex[pre_R]) {
+                    pre_R = i;
+                } else {
+                    pre_L = i;
+                }
+            } else if(A[pre_L] != A[i]) {
+                ans ++;
+                pre_L = i;
+            } else if(A[pre_R] != A[i]) {
+                ans ++;
+                pre_R = i;
+            } else {
+                pre_R = i;
+            }
+        }   
+
+        printf("%d\n", ans);
+    }
+    return 0;
+
 }
