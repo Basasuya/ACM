@@ -49,67 +49,30 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-const int MAXN = 2e5 + 5;
-int A[MAXN];
-
+const int MAXN = 106;
+int  A[MAXN];
 int main() {
     int T;
     scanf("%d", &T);
     while(T --) {
-        int n, p;
-        scanf("%d %d", &n, &p);
-        
+        int n;
+        scanf("%d", &n);
+        n *= 2;
         for(int i = 0; i < n; ++i) {
             scanf("%d", &A[i]);
         }
 
-        vector<pair<int, int>> vc;
-        
-        vector<bool> connected(n, false);
-
+        int odd = 0;
+        int even = 0;
         for(int i = 0; i < n; ++i) {
-            vc.push_back({A[i], i});    
+            if(A[i] % 2 == 0)
+                odd ++;
+            else
+                even ++;
         }
 
-        sort(vc.begin(), vc.end());
-
-        ll ans = 0;
-        int cnt = 0;
-        for(int i = 0; i < n; ++i) {
-            if(vc[i].first >= p) break;
-
-            int pos = vc[i].second;
-            int tt = pos - 1;
-            int find = false;
-            while(tt >= 0) {
-                if(A[tt] % A[pos] == 0 && !connected[tt]) {
-                    find = true;
-                    ans += vc[i].first;
-                    cnt ++;
-                    connected[tt] = true;
-                } else break;
-                tt --;
-            }
-
-            tt = pos + 1;
-            while(tt < n) {
-                if(A[tt] % A[pos] == 0 && !connected[tt - 1]) {
-                    find = true;
-                    ans += vc[i].first;
-                    cnt ++;
-                    connected[tt - 1] = true;
-                } else break;
-                tt ++;
-            }
-
-            // if(find) connected[pos] = true;
-        }
-
-        ans += 1ll * (n - 1 - cnt) * p;
-
-        printf("%lld\n", ans);
-
-
+        if(odd == even) printf("Yes\n");
+        else printf("No\n");
     }
     return 0;
 }

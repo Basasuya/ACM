@@ -56,60 +56,50 @@ int main() {
     int T;
     scanf("%d", &T);
     while(T --) {
-        int n, p;
-        scanf("%d %d", &n, &p);
+        int n;
+        scanf("%d", &n);
         
         for(int i = 0; i < n; ++i) {
             scanf("%d", &A[i]);
-        }
+        }   
 
-        vector<pair<int, int>> vc;
-        
-        vector<bool> connected(n, false);
+        int ans = 0;
 
         for(int i = 0; i < n; ++i) {
-            vc.push_back({A[i], i});    
+            bool up = true;
+            vector<int> vc;
+            for(int j = i, edge = min(i + 4, n), cnt = 1; j < edge; ++j, ++cnt) {
+                if(cnt <= 2) {
+                    ans ++;
+                    if(cnt == 2) {
+                        if(A[j] > A[j - 1]) {
+                            vc.push_back(A[j - 1]);
+                            vc.push_back(A[j]);
+                        } else {
+                            up = false;
+                            vc.push_back(- A[j - 1]);
+                            vc.push_back(- A[j]);
+                        }
+                        if(A[j] == A[j - 1]) break;
+                    }
+                } else {
+                    vc.push_back(up ? A[j] : -A[j]);
+
+                    if(cnt == 3){
+                        if(vc[1] > vc[2]) {
+                            ans ++;
+                            if(vc[2] >= vc[0]) break;
+                        } else break;
+                    } else if(cnt == 4){
+                        if(vc[3] > vc[2] && vc[3] < vc[1]) {
+                            ans ++;
+                        }
+                    }
+                }
+            }
         }
 
-        sort(vc.begin(), vc.end());
-
-        ll ans = 0;
-        int cnt = 0;
-        for(int i = 0; i < n; ++i) {
-            if(vc[i].first >= p) break;
-
-            int pos = vc[i].second;
-            int tt = pos - 1;
-            int find = false;
-            while(tt >= 0) {
-                if(A[tt] % A[pos] == 0 && !connected[tt]) {
-                    find = true;
-                    ans += vc[i].first;
-                    cnt ++;
-                    connected[tt] = true;
-                } else break;
-                tt --;
-            }
-
-            tt = pos + 1;
-            while(tt < n) {
-                if(A[tt] % A[pos] == 0 && !connected[tt - 1]) {
-                    find = true;
-                    ans += vc[i].first;
-                    cnt ++;
-                    connected[tt - 1] = true;
-                } else break;
-                tt ++;
-            }
-
-            // if(find) connected[pos] = true;
-        }
-
-        ans += 1ll * (n - 1 - cnt) * p;
-
-        printf("%lld\n", ans);
-
-
+        printf("%d\n", ans);
     }
     return 0;
 }

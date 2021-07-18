@@ -49,67 +49,26 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-const int MAXN = 2e5 + 5;
-int A[MAXN];
 
 int main() {
     int T;
     scanf("%d", &T);
     while(T --) {
-        int n, p;
-        scanf("%d %d", &n, &p);
+        int n;
+        scanf("%d", &n);
         
-        for(int i = 0; i < n; ++i) {
-            scanf("%d", &A[i]);
-        }
-
-        vector<pair<int, int>> vc;
-        
-        vector<bool> connected(n, false);
-
-        for(int i = 0; i < n; ++i) {
-            vc.push_back({A[i], i});    
-        }
-
-        sort(vc.begin(), vc.end());
-
-        ll ans = 0;
-        int cnt = 0;
-        for(int i = 0; i < n; ++i) {
-            if(vc[i].first >= p) break;
-
-            int pos = vc[i].second;
-            int tt = pos - 1;
-            int find = false;
-            while(tt >= 0) {
-                if(A[tt] % A[pos] == 0 && !connected[tt]) {
-                    find = true;
-                    ans += vc[i].first;
-                    cnt ++;
-                    connected[tt] = true;
-                } else break;
-                tt --;
+        int ans = -1;
+        for(int mid = 1; mid <= n; ++mid) {
+            int min_sum = mid;
+            int max_sum = mid * mid;
+            
+            if(n >= min_sum && n <= max_sum) {
+                ans = mid;
+                break;
             }
-
-            tt = pos + 1;
-            while(tt < n) {
-                if(A[tt] % A[pos] == 0 && !connected[tt - 1]) {
-                    find = true;
-                    ans += vc[i].first;
-                    cnt ++;
-                    connected[tt - 1] = true;
-                } else break;
-                tt ++;
-            }
-
-            // if(find) connected[pos] = true;
         }
 
-        ans += 1ll * (n - 1 - cnt) * p;
-
-        printf("%lld\n", ans);
-
-
+        printf("%d\n", ans);
     }
     return 0;
 }

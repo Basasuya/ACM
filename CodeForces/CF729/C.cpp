@@ -49,67 +49,59 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-const int MAXN = 2e5 + 5;
-int A[MAXN];
+const int MOD = 1e9 + 7;
 
+ll solve(ll x) {
+    for(ll i = 1; i <= x + 1; ++i) {
+        if(x % i != 0) {
+            return i;
+        }
+    }
+    return -1;
+}
 int main() {
+    // ll maxx = -1;
+    // for(ll i = 1; i <= 1e16; ++i) {
+    //     ll ans = solve(i);
+    //     maxx = max(maxx, ans);
+    //     if(i % 100000 == 0) {
+    //         debug(i, maxx);
+    //     }
+    //     // if(ans > 5) printf("%lld %lld\n", i, solve(i));
+    // }
+    // debug(maxx);
+
     int T;
     scanf("%d", &T);
     while(T --) {
-        int n, p;
-        scanf("%d %d", &n, &p);
-        
-        for(int i = 0; i < n; ++i) {
-            scanf("%d", &A[i]);
-        }
-
-        vector<pair<int, int>> vc;
-        
-        vector<bool> connected(n, false);
-
-        for(int i = 0; i < n; ++i) {
-            vc.push_back({A[i], i});    
-        }
-
-        sort(vc.begin(), vc.end());
-
         ll ans = 0;
-        int cnt = 0;
-        for(int i = 0; i < n; ++i) {
-            if(vc[i].first >= p) break;
 
-            int pos = vc[i].second;
-            int tt = pos - 1;
-            int find = false;
-            while(tt >= 0) {
-                if(A[tt] % A[pos] == 0 && !connected[tt]) {
-                    find = true;
-                    ans += vc[i].first;
-                    cnt ++;
-                    connected[tt] = true;
-                } else break;
-                tt --;
+        ll n;
+        scanf("%lld", &n);
+
+        vector<int> vc;
+        int pre = 0; ll mul = 1;
+
+        for(int i = 2; i <= 100; ++i) {
+            int tmp = i;
+            for(auto x : vc) {
+                if(tmp % x == 0) {
+                    tmp /= x;
+                }
             }
 
-            tt = pos + 1;
-            while(tt < n) {
-                if(A[tt] % A[pos] == 0 && !connected[tt - 1]) {
-                    find = true;
-                    ans += vc[i].first;
-                    cnt ++;
-                    connected[tt - 1] = true;
-                } else break;
-                tt ++;
-            }
-
-            // if(find) connected[pos] = true;
+            // debug(vc);
+            
+            if(tmp != 1) {
+                vc.push_back(tmp);
+                if(mul > n) break;
+                ans = (ans + 1ll * (n / mul) * (i - pre) % MOD) % MOD;
+                pre = i;
+                mul *= tmp;
+            } 
         }
-
-        ans += 1ll * (n - 1 - cnt) * p;
 
         printf("%lld\n", ans);
-
-
     }
     return 0;
 }
