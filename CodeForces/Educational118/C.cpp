@@ -49,33 +49,38 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-const int MAXN = 106;
-int  A[MAXN];
-int main() {
-    vector<int> vc(100);
-    printf("%d\n", vc.size());
+const int MAXN = 105;
+int A[MAXN];
 
+int main() {
     int T;
     scanf("%d", &T);
     while(T --) {
-        int n;
-        scanf("%d", &n);
-        n *= 2;
+        int n; ll h;
+        scanf("%d %lld", &n, &h);
         for(int i = 0; i < n; ++i) {
             scanf("%d", &A[i]);
         }
 
-        int odd = 0;
-        int even = 0;
-        for(int i = 0; i < n; ++i) {
-            if(A[i] % 2 == 0)
-                odd ++;
-            else
-                even ++;
+        ll l = 1; ll r = h;
+        while(l <= r) {
+            ll mid = (l + r) >> 1;
+
+            ll ans = 0;
+            for(int i = 1; i < n; ++i) {
+                if(A[i - 1] + mid > A[i]) {
+                    ans += A[i] - A[i - 1];
+                } else {
+                    ans += mid;
+                }
+            }
+            ans += mid;
+
+            if (ans >= h) r = mid - 1;
+            else l = mid + 1;
         }
 
-        if(odd == even) printf("Yes\n");
-        else printf("No\n");
+        printf("%lld\n", l);
     }
     return 0;
 }

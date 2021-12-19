@@ -49,33 +49,46 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-const int MAXN = 106;
-int  A[MAXN];
-int main() {
-    vector<int> vc(100);
-    printf("%d\n", vc.size());
+const int MAXN = 1005;
+char seq[MAXN];
 
+int main() {
     int T;
     scanf("%d", &T);
     while(T --) {
         int n;
         scanf("%d", &n);
-        n *= 2;
-        for(int i = 0; i < n; ++i) {
-            scanf("%d", &A[i]);
-        }
+        scanf("%s", seq);
 
-        int odd = 0;
-        int even = 0;
-        for(int i = 0; i < n; ++i) {
-            if(A[i] % 2 == 0)
-                odd ++;
-            else
-                even ++;
-        }
+        int l = 0; int r = n - 1;
 
-        if(odd == even) printf("Yes\n");
-        else printf("No\n");
+        vector<int> ans;
+
+        while(l < r) {
+            while(seq[l] != '1' && l < n) {
+                l ++;
+            }
+
+            while(seq[r] != '0' && r >= 0) {
+                r --;
+            }
+
+            if (l < r) {
+                ans.push_back(l + 1);
+                ans.push_back(r + 1);
+            }
+            l ++; r --;
+        } 
+
+        sort(ans.begin(), ans.end());
+        if (ans.size() > 0) { 
+            printf("1\n%d ", (int)ans.size());
+            for(int i = 0, len = ans.size(); i < len; ++i) {
+                if(i) printf(" ");
+                printf("%d", ans[i]);
+            }
+            printf("\n");
+        } else printf("0\n");
     }
     return 0;
 }

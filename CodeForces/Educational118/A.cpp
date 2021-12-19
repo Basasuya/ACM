@@ -49,33 +49,49 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-const int MAXN = 106;
-int  A[MAXN];
-int main() {
-    vector<int> vc(100);
-    printf("%d\n", vc.size());
+int getLen(int x) {
+    int cnt = 0;
+    while(x) {
+        x /= 10;
+        cnt ++;
+    }
+    return cnt;
+}
 
+ll getPow(int x) {
+    ll ans = 1;
+    for(int i = 0; i < x; ++i) {
+        ans *= 10;
+    }
+    return ans;
+} 
+int main() {
     int T;
     scanf("%d", &T);
     while(T --) {
-        int n;
-        scanf("%d", &n);
-        n *= 2;
-        for(int i = 0; i < n; ++i) {
-            scanf("%d", &A[i]);
+        int x1, p1;
+        scanf("%d %d", &x1, &p1);
+        int x2, p2;
+        scanf("%d %d", &x2, &p2);
+
+        int l1 = getLen(x1) + p1;
+        int l2 = getLen(x2) + p2;
+        
+        if (l1 != l2) {
+            printf("%c\n", l1 > l2 ? '>' : '<');
+            continue;
         }
 
-        int odd = 0;
-        int even = 0;
-        for(int i = 0; i < n; ++i) {
-            if(A[i] % 2 == 0)
-                odd ++;
-            else
-                even ++;
+        ll ans1 = x1; ll ans2 = x2;
+
+        if (p1 > p2) {
+            ans1 *= getPow(p1 - p2);
+        } else {
+            ans2 *= getPow(p2 - p1);
         }
 
-        if(odd == even) printf("Yes\n");
-        else printf("No\n");
+        if (ans1 == ans2) printf("=\n");
+        else printf("%c\n", ans1 > ans2 ? '>' : '<');
     }
     return 0;
 }

@@ -49,33 +49,74 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-const int MAXN = 106;
-int  A[MAXN];
+const int N = 2e5 + 5;
+const int MOD = 1e9 + 7;
+ll Mul[N];
+
+ll Pow(ll x, ll y) {
+    ll ans = 1;
+    while(y) {
+        if(y & 1) ans = 1ll * ans * x % MOD;
+        x = 1ll * x * x % MOD;
+        y >>= 1;
+    }
+    return ans;
+}
+
+ll C(int x, int y) {
+    if(y == 0) return 1;
+    return 1ll* Mul[x] * Pow(Mul[y] * Mul[x - y] % MOD, MOD - 2) % MOD;
+}
+
 int main() {
-    vector<int> vc(100);
-    printf("%d\n", vc.size());
-
     int T;
-    scanf("%d", &T);
+    scanf("%d",&T);
+
+    Mul[1] = 1; Mul[0] = 1;
+    for(int i = 2; i < N; ++i) {
+        Mul[i] = 1ll* Mul[i-1] * i % MOD;
+    }
+
     while(T --) {
-        int n;
-        scanf("%d", &n);
-        n *= 2;
-        for(int i = 0; i < n; ++i) {
-            scanf("%d", &A[i]);
+        int n, k;
+        scanf("%d %d", &n, &k);
+
+        if(k == 0) {
+            printf("1\n");
+            continue;
         }
 
-        int odd = 0;
-        int even = 0;
-        for(int i = 0; i < n; ++i) {
-            if(A[i] % 2 == 0)
-                odd ++;
-            else
-                even ++;
+        // ll odd = 0;
+        // for(int i = 1; i <= n; i += 2) {
+        //     odd = (odd + C(n, i)) % MOD;
+        // }
+
+        ll even = 0;
+        for(int i = 0; i <= n; i += 2) {
+            even = (even + C(n, i)) % MOD;
         }
 
-        if(odd == even) printf("Yes\n");
-        else printf("No\n");
+        int all = Pow(2, n);
+
+        debug(even);
+
+        ll ans = 0;
+        ll tmp = 1;
+        for(int i = 1; i <= k; ++i) {
+            if(n % 2) {
+                tmp = (even + 1) * tmp % MOD;
+            } else {
+                ans = (ans + tmp * Pow(all, k - i) % MOD) % MOD;
+                tmp = (even - 1 + MOD) * tmp % MOD;
+            }
+            
+            if(i == k) {
+                ans = (ans + tmp) % MOD;
+            }
+            debug(ans, tmp);
+        }
+
+        printf("%lld\n", ans);
     }
     return 0;
 }

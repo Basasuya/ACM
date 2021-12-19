@@ -49,32 +49,38 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-const int MAXN = 106;
-int  A[MAXN];
-int main() {
-    vector<int> vc(100);
-    printf("%d\n", vc.size());
+const int MAXN = 1e5 + 5;
+int A[MAXN];
 
+int main() {
     int T;
     scanf("%d", &T);
     while(T --) {
-        int n;
-        scanf("%d", &n);
-        n *= 2;
+        int n, k;
+        scanf("%d %d", &n, &k);
+
+        vector<int> vc;
+        vector<int> order(n, -1);
+
         for(int i = 0; i < n; ++i) {
             scanf("%d", &A[i]);
+            vc.push_back(i);
         }
 
-        int odd = 0;
-        int even = 0;
+        sort(vc.begin(), vc.end(), [](int x, int y) {
+            return A[x] < A[y];
+        });
+
         for(int i = 0; i < n; ++i) {
-            if(A[i] % 2 == 0)
-                odd ++;
-            else
-                even ++;
+            order[vc[i]] = i;
         }
 
-        if(odd == even) printf("Yes\n");
+        int ans = 1;
+        for(int i = 1; i < n; ++i) {
+            if(order[i] != order[i - 1] + 1) ans ++;
+        }
+        
+        if(ans <= k) printf("Yes\n");
         else printf("No\n");
     }
     return 0;

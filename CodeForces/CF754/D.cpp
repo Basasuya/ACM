@@ -49,33 +49,83 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-const int MAXN = 106;
-int  A[MAXN];
-int main() {
-    vector<int> vc(100);
-    printf("%d\n", vc.size());
 
+const int N = 2e5 + 5;
+struct Node{
+    int fr, to, nx, dis;
+}E[N << 1];
+int head[N]; int tot = 0; 
+void add(int fr, int to) {
+    E[tot].to = to; E[tot].nx = head[fr]; head[fr] = tot ++;
+}
+
+
+vector<int> group[2];
+
+void dfs(int x, int pre, int floor) {
+    group[floor].push_back(x);
+
+    for(int i = head[x]; ~i; i = E[i].nx) {
+        int to = E[i].to;
+        if (to == pre) {
+            continue;
+        }
+        dfs(to, x, floor ^ 1);
+    } 
+}
+
+
+int main() {
     int T;
     scanf("%d", &T);
     while(T --) {
         int n;
         scanf("%d", &n);
-        n *= 2;
-        for(int i = 0; i < n; ++i) {
-            scanf("%d", &A[i]);
+
+        tot = 0;
+        for(int i = 0; i <= n; ++i) {
+            head[i] = -1;
+        }
+        group[0].clear();
+        group[1].clear();
+        vector<int> result(n + 1, 0);
+
+        for(int i = 1; i < n; ++i) {
+            int fr, to;
+            scanf("%d %d", &fr, &to);
+            add(fr, to);
+            add(to, fr);
         }
 
-        int odd = 0;
-        int even = 0;
-        for(int i = 0; i < n; ++i) {
-            if(A[i] % 2 == 0)
-                odd ++;
-            else
-                even ++;
+        debug(n);
+
+        dfs(1, 0, 0);
+
+        int choose_small = group[0].size() < group[1].size() ? 0 : 1;
+        int cnt1 = 0; int cnt2 = 0;
+        int num = group[choose_small].size();
+
+        debug(group[0].size(), group[1].size());
+
+        for(int i = 0; i < 30; ++i) {
+            for(int j = 1<<i, len = min((1<<(i+1))-1, n); j <= len; ++j) {
+                if ((num >> i) & 1) {
+                    result[group[choose_small][cnt1 ++]] = j;
+                } else {
+                    result[group[choose_small ^ 1][cnt2 ++]] = j;
+                }
+            }
+            if ((1<<(i+1))-1 >= n) break;
         }
 
-        if(odd == even) printf("Yes\n");
-        else printf("No\n");
+        // for(int)
+
+
+        for(int i = 1; i <= n; ++i) {
+            if(i != 1) printf(" ");
+            printf("%d", result[i]);
+        }
+        printf("\n");
     }
     return 0;
 }

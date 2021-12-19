@@ -49,33 +49,101 @@ void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...)
 #define debug(...) 42
 #endif
 
-const int MAXN = 106;
-int  A[MAXN];
+const int MAXN = 5e5 + 5;
+const int MOD = 998244353;
+int A[MAXN];
+ll dp[MAXN];
+int cnt[MAXN];
+ll two[MAXN];
+
+// ll Pow(ll x, ll y) {
+//     ll ans = 1;
+//     while(y) {
+//         if(y & 1) ans = 1ll * ans * x % MOD;
+//         x = 1ll * x * x % MOD;
+//         y >>= 1;
+//     }
+//     return ans;
+// }
+
+// ll C(int x, int y) {
+//     if(y == 0) return 1;
+//     return 1ll* Mul[x] * Pow(Mul[y] * Mul[x - y] % MOD, MOD - 2) % MOD;
+// }
+
 int main() {
-    vector<int> vc(100);
-    printf("%d\n", vc.size());
+    two[0] = 1;
+    for(int i = 1; i < MAXN; ++i) {
+        two[i] = two[i - 1] * 2 % MOD;
+    }
 
     int T;
     scanf("%d", &T);
     while(T --) {
         int n;
         scanf("%d", &n);
-        n *= 2;
+
+        for(int i = 0; i <= n; ++i) {
+            dp[i] = 0;
+            cnt[i] = 0;
+        }
+
         for(int i = 0; i < n; ++i) {
             scanf("%d", &A[i]);
+            cnt[A[i]] ++;
         }
 
-        int odd = 0;
-        int even = 0;
+        
+
+        ll ans = (two[cnt[1]] - 1 + MOD) % MOD;
+
+        // int zero = 0; int one = 0; int two = 0;
+        // for(int i = 0; i < n; ++i) {
+        //     if(A[i] == 0) {
+        //         zero ++;
+        //     } else if (A[i] == 1) {
+        //         one ++;
+        //     } else if (A[i] == 2) {
+        //         two ++;
+        //     }
+        // }
+
+        // ans = (Pow(2, zero) - 1 + MOD) % MOD;
+
+        // ans = (ans + Pow(2, one) - 1 + MOD) % MOD;
+
+        // ans = (ans + ((Pow(2, zero) - 1 + MOD) % MOD) * ((Pow(2, two) - 1 + MOD) % MOD) % MOD)% MOD;
+
+
         for(int i = 0; i < n; ++i) {
-            if(A[i] % 2 == 0)
-                odd ++;
-            else
-                even ++;
+            int val = A[i];
+            
+            cnt[val] --;
+            
+            ll add = 0;
+            if (val == 0) {
+                add = dp[0] + 1;
+                dp[0] = (dp[0] + add) % MOD;
+            } else {
+                add = dp[val] + dp[val - 1];
+                dp[val] = (dp[val] + add) % MOD;
+            }
+
+            if (val >= 2) {
+                ans = (ans + dp[val - 2] * two[cnt[val]] % MOD * (two[cnt[val - 2]] + MOD) % MOD) % MOD;
+            }
+
+
+            
+            // debug(ans);
         }
 
-        if(odd == even) printf("Yes\n");
-        else printf("No\n");
+        for(int i = 0; i <= n; ++i) {
+            // debug(dp[i]);
+            ans = (ans + dp[i]) % MOD;
+        }
+
+        printf("%lld\n", ans);
     }
     return 0;
 }
